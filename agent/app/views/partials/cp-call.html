@@ -1,0 +1,159 @@
+<link rel="stylesheet" href="styles/vendor/cp-call.css">
+<div ng-controller="WinAppVideoController">
+    <div id="controls" style="width:100%;left:0">
+        <div id="preview" style="width:26%">
+            <!-- <div class="div-heading">Elevator</div> -->			
+            <div id="remote-media">
+                <div id="local-media"></div>
+            </div>
+			<div style="text-align: center;"><input value="Hang Up" type="button" style="width:100px" ng-click="hangUpCpuriCall()"/></div>
+            <div style="font-size: 24px;    padding-top: 18px;">Remote Audio Stats</div>
+            <div id="stats-info">
+                <div class="table">
+                    <div class="th">&nbsp;</div>
+                    <div class="td">
+                        <span>Remote-1</span>
+                    </div>
+                    <div class="td">
+                        <span>Remote-2</span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th" title="Bytes Received">Bytes Rec..</div>
+                    <div class="td">
+                        <span id="tdBytesReceived1"></span>
+                    </div>
+                    <div class="td">
+                        <span id="tdBytesReceived2"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">Codec</div>
+                    <div class="td">
+                        <span id="tdCodec1"></span>
+                    </div>
+                    <div class="td">
+                        <span id="tdCodec2"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">Jitter</div>
+                    <div class="td">
+                        <span id="tdJitter1"></span>
+                    </div>
+                    <div class="td">
+                        <span id="tdJitter2"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th" title="Packet Received">Packet Rec..</div>
+                    <div class="td">
+                        <span id="tdPacket1"></span>
+                    </div>
+                    <div class="td">
+                        <span id="tdPacket2"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">Packet Lost</div>
+                    <div class="td">
+                        <span id="tdPacketLost1"></span>
+                    </div>
+                    <div class="td">
+                        <span id="tdPacketLost2"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">SSRC</div>
+                    <div class="td">
+                        <span id="tdSSRC1"></span>
+                    </div>
+                    <div class="td">
+                        <span id="tdSSRC2"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="elevator-info" class="myChat" style="width:25%">
+            Chat
+            <div id="divChat" style="text-align: left;
+            padding-left: 9px;height: 94%;
+            border-color: black;
+            border-width: 1px;
+            border-style: solid;"></div>
+            <textarea type="text" id="message"></textarea>
+            <input type="button" id="btnSend" value="Send">
+        </div>
+
+        <div id="elevator-info" style="width:46%">
+            <div class="div-heading">Elevator Information</div>
+            <hr style="margin:0 0 12px 0;border: 1px solid;">
+            <div class="div-heading">
+                <div class="table">
+                    <div class="th">ElevatorId</div>
+                    <div class="space">:</div>
+                    <div class="td">
+                        <span id="tdElevatorID"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">UUID</div>
+                    <div class="space">:</div>
+                    <div class="td">
+                        <span id="tdUUID"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">Customer Name</div>
+                    <div class="space">:</div>
+                    <div class="td">
+                        <span id="tdCustomerName"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">Building Name</div>
+                    <div class="space">:</div>
+                    <div class="td">
+                        <span id="tdBuildingName"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">Address</div>
+                    <div class="space">:</div>
+                    <div class="td">
+                        <span id="tdAddress"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">Contract Info</div>
+                    <div class="space">:</div>
+                    <div class="td">
+                        <span id="tdContractInfo"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">Contract Status</div>
+                    <div class="space">:</div>
+                    <div class="td">
+                        <span id="tdContractStatus"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">Controller Type</div>
+                    <div class="space">:</div>
+                    <div class="td">
+                        <span id="tdControllerType"></span>
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="th">OTIS Branch</div>
+                    <div class="space">:</div>
+                    <div class="td">
+                        <span id="tdOTISBranch"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

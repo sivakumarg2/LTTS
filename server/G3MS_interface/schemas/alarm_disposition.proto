@@ -1,0 +1,17 @@
+syntax = "proto3";
+package google.protobuf;
+
+
+message DispositionInput
+{
+	string voice_uuid = 1; 
+	string unit_id = 2;
+	uint32 voice_call_type = 3;
+	string call_initiator = 4;
+	string call_start_datetime = 5;
+	string call_end_datetime = 6;
+	uint32 disposition_code = 7;
+	uint32 video_quality = 8;
+	uint32 audio_quality = 9;
+	string notes = 10;
+}

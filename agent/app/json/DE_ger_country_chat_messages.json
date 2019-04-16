@@ -1,0 +1,17 @@
+{
+  "title": "Fragetexte",
+  "priority": "Priorität",
+  "questionTexts": "Fragetexte",
+  "questionText": "Fragetext",
+  "action": "Aktion",
+  "saveBtn": "Speichern",
+  "cancelBtn": "Abbrechen",
+  "translation": "traduction",
+  "emptyQuestionText": "Bitte geben Sie Fragetext-Übersetzung ein",
+  "saveStatus": "Fragetext erfolgreich gespeichert",
+  "showing": "Zeigen",
+  "of": "von",
+  "Seiten": "Seiten",
+  "noRecordFound": "Keine Datensätze gefunden",
+  "noCountryConfigFound": "Keine Länderkonfiguration gefunden"
+}

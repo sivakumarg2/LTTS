@@ -1,0 +1,17 @@
+{
+	"incomingCalls": "Incoming Calls",
+	"missedCalls": "Missed Calls",
+	"avgCallDuration": "Average Call Duration",
+	"attendedCalls": "Attended Calls",
+	"attendLess30": "Call Attended in less than 30Secs",
+	"avgAcceptanceTime": "Avg Acceptance Time",
+	"agentName": "Agent Name",
+	"numberOfCalls": "Number of calls",
+	"byAgent": "Report by Agent",
+	"to": "To: ",
+	"from": "From: ",
+	"byDate": "Report by Date",
+	"search": "Search",
+	"clear": "Clear",
+	"noRecordFound": "No Record Found"
+}

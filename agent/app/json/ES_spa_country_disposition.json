@@ -1,0 +1,19 @@
+{
+  "title": "Disposición de llamadas",
+  "code": "código",
+  "callDisposition": "Disposición de llamada",
+  "action": "Acción",
+  "countryCallDispoModalHeader": "Configuración de disposición de llamada de país",
+  "countryCallDispoModalSaveBtn": "Guardar",
+  "countryCallDispoModalCancelBtn": "Cancelar",
+  "countryCallDispoModalCallDispositionLabel": "disposición de llamada",
+  "countryCallDispoModalTranslationLabel": "La traducción",
+  "translatedCallDispoEmpty": "Por favor, introduzca la traducción de la disposición de llamada",
+  "countryCallDispoSaveStatus": "¡Configuraciones de Disposición de llamada de país, pistas guardadas!",
+  "deletecountryCallDispoSaveStatus": "Eliminación de la configuración de eliminación de llamadas de país",
+  "showing": "demostración",
+  "of": "de",
+  "pages": "páginas",
+  "noRecordFound": "No se encontraron registros",
+  "noCountryConfigFound": "No se encontró ninguna configuración de país"
+}

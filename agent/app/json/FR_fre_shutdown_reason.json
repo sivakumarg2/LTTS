@@ -1,0 +1,23 @@
+{
+  "codeFormLabel": "Code",
+  "shutdownReasonFormLabel": "Raison d'arrêt",
+  "codeTbleHeading": "Code",
+  "shutdownReasonTblHeading": "Raison d'arrêt",
+  "actionTblHeading": "Action",
+  "addNewShutdownReason": "+ Nouvelle raison d'arrêt",
+  "shutdownReasonSaveStatus": "Shutdown Reason enregistré avec succès",
+  "deleteShutdownReasonStatus": "Shutdown Reason supprimé avec succès",
+  "shutdownReasonModalTitle": "Raison d'arrêt",
+  "codeFieldEmpty": "Veuillez entrer le code de motif d'arrêt",
+  "shutdownReasonFieldEmpty": "Veuillez entrer la raison de l'arrêt",
+  "okbtn": "D'accord",
+  "cancelbtn": "Annuler",
+  "saveBtn": "Sauvegarder",
+  "showing": "Montrer",
+  "of": "de",
+  "pages": "pages",
+  "shutdownReasonCodeDuplicate":"Le code de raison d'arrêt existe déjà",
+  "noRecordFound": "Aucun enregistrement trouvé",
+  "isTestCall": "Appel d'essai",
+  "title":"Raison d'arrêt"
+}

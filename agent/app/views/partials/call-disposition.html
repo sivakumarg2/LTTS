@@ -1,0 +1,117 @@
+<div ng-init="getAllCallDisposition()" class="calldisposition-container" ng-controller="callDispstnController">
+    <div class="callDisposition-lbltitle">{{callDisptnlangTranslation.title}}</div>
+    <div class="addbtn-row">
+        <button type="button" class="btn btn-blue" ng-disabled=" " ng-click="addNewCallDisposition()">{{callDisptnlangTranslation.addNewCallDisposition}}</button>
+    </div>
+    <div class="save-satus status-msg-fade" ng-show="calldispositonStatus.save">
+        <p>{{callDisptnlangTranslation.callDispostionSaveStatus}}</p>
+    </div>
+    <div class="save-satus status-msg-fade" ng-show="calldispositonStatus.delete">
+        <p>{{callDisptnlangTranslation.deleteCallDispostionStatus}}</p>
+    </div>
+    <div class="search-top-input-div div-margin-top-search">
+        <input class="search-input-form-control-big form-control" ng-model="search.searchText"/>
+        <span class="glyphicon-search-top-big glyphicon glyphicon-search"></span>
+      </div>
+    <!-- Call disposition  table start -->
+    <div class="calldisposition-table">
+        <div ng-class="{'table': true, 'bottom-margin': (callDispositions | filter:search.searchText).length <= 0 }">
+            <div class="table-row">
+                <div class="table-head"><strong>{{callDisptnlangTranslation.codeTbleHeading}}</strong></div>
+                <div class="table-head"><strong>{{callDisptnlangTranslation.callDispositionTblHeading}}</strong></div>
+                <div class="table-head"><strong>{{callDisptnlangTranslation.shutdownReasonCode}}</strong></div>
+                <div class="table-head"><strong>{{callDisptnlangTranslation.actionTblHeading}}</strong></div>
+            </div>
+            <div class="table-row" ng-repeat="clldis in callDispositions | filter:search.searchText | startFrom:currentPage*pageSize | limitTo:pageSize">
+                <div class="table-cell">{{clldis.code}}</div>
+                <div class="table-cell">{{clldis.callDisposition}}</div>
+                <!-- <div class="table-cell"><span ng-class="{'glyphicon': true, 'glyphicon-ok': clldis.isTestCall, 'glyphicon-remove': !clldis.isTestCall}"></span></div> -->
+                <div class="table-cell">{{clldis.shutdownReasonCode}}</div>
+                <div class="table-cell"><span class="glyphicon glyphicon-pencil" ng-click="editCallDisposition(clldis);"></span>
+                    <span class="glyphicon glyphicon-trash" ng-click="deleteCallDisposition(clldis.callDispositionId)"></span>
+                </div>
+            </div>
+        </div>
+        <div class="table-row-empty-new no-record-found" ng-show="(callDispositions | filter:search.searchText).length <= 0">{{callDisptnlangTranslation.noRecordFound}}</div>
+    </div>
+    <!-- Call disposition  table end -->
+    <!-- Call disposition table pageinitation start -->
+    <div ng-show="(callDispositions | filter:search.searchText).length > pageSize " class="pre-nxt-div ">
+        <button type="button" ng-class="{ 'disable-btn':currentPage==0,'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0" ng-click="currentPage=0">
+            <span class="glyphicon glyphicon-backward"></span></button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage==0, 'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0" ng-click="currentPage=currentPage-1 ">
+            <span class="glyphicon glyphicon-chevron-left"></span></button> {{callDisptnlangTranslation.showing}} {{currentPage+1}} {{callDisptnlangTranslation.of}} {{Math.ceil((callDispositions | filter:search.searchText).length / pageSize)}} {{callDisptnlangTranslation.pages}}
+        <button type="button" ng-class="{ 'disable-btn':currentPage >= (callDispositions | filter:search.searchText).length/pageSize - 1,'btn-prnx': currentPage < (callDispositions | filter:search.searchText).length/pageSize - 1}" ng-disabled="currentPage >= (callDispositions | filter:search.searchText).length/pageSize - 1" ng-disabled="currentPage == (callDispositions | filter:search.searchText).length/pageSize - 1" ng-click="currentPage=currentPage+1">
+            <span class="glyphicon glyphicon-chevron-right"></span></button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage >= (callDispositions | filter:search.searchText).length/pageSize - 1,'btn-prnx': currentPage < (callDispositions | filter:search.searchText).length/pageSize - 1 }"
+            ng-disabled="currentPage >= (callDispositions | filter:search.searchText).length/pageSize - 1" ng-click="currentPage =  Math.ceil((callDispositions | filter:search.searchText).length / pageSize) -1">
+            <span class="glyphicon glyphicon-forward"></span></button>
+    </div>
+    <!-- Call disposition table pageinitation end -->
+    <!-- Call dispostion modal start -->
+    <div id="callDispositionModal" class="cca-modal">
+        <div class="cca-modal-dialog">
+            <div class="cca-modal-content">
+                <div class="cca-modal-header">
+                    {{callDisptnlangTranslation.callDispostionModalTitle}}
+                    <span class="close" ng-click="hideCallDispostionModal()">&times;</span>
+                </div>
+                <div class="cca-modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 center">
+                            <form class="form-horizontal" novalidate>
+                              <div class="modal-status error-status">
+                                  <p class="modal-status-message" ng-show="calldispositonStatus.duplicate">{{callDisptnlangTranslation.callDispostionCodeDuplicate}}</p>
+                              </div>
+                                <!--Code input start -->
+                                <div class="form-group" ng-class="{'has-error ac-input-feedback': formfieldError.code.hasError}">
+                                    <label for="code" class="col-sm-4">{{callDisptnlangTranslation.codeTbleHeading}}</label>
+                                    <div class="col-sm-7">
+                                        <input input-constraint max='20' regex='{{onlyNumberRegexPattren}}' ng-model="callDispositionFormModel.code" type="text" class="form-control" id="code"/>
+                                        <span ng-show="formfieldError.code.hasError" aria-hidden="true" class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+                                        <div class="error-container">
+                                            <span ng-show="formfieldError.code.hasError">{{formfieldError.code.message}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Code input end-->
+                                <!--  Call Dispostion input start-->
+                                <div class="form-group" ng-class="{'has-error ac-input-feedback': formfieldError.callDisposition.hasError}">
+                                    <label for="callDisposition" class="col-sm-4">{{callDisptnlangTranslation.calldispositionFormLabel}}</label>
+                                    <div class="col-sm-7">
+                                        <input ng-model="callDispositionFormModel.callDisposition" ng-maxlength="100" maxlength="100" type="text" class="form-control" id="callDisposition"/>
+                                        <span ng-show="formfieldError.callDisposition.hasError" aria-hidden="true" class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+                                        <div class="error-container">
+                                            <span ng-show="formfieldError.callDisposition.hasError">{{formfieldError.callDisposition.message}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Call Dispostion input end -->
+                                 <!--  Call Disposition Is Test Call -->
+                                 <div class="form-group" ng-class="{'has-error ac-input-feedback': formfieldError.callDisposition.hasError}">
+                                    <label for="callDisposition" class="col-sm-4">{{callDisptnlangTranslation.shutdownReasonCode}}</label>
+                                    <div class="col-sm-7">
+                                        <input input-constraint max='20' regex='{{onlyNumberRegexPattren}}' ng-model="callDispositionFormModel.shutdownReasonCode" type="text" class="form-control" id="shutdownReasonCode"/>
+                                    </div>
+                                </div>
+                                <!-- Call Disposition Is Test Call -->
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 col-sm-5 redirectionItems">
+                                        <button type="button" class="btn btn-grey btn-cancel pull-right" ng-click="hideCallDispostionModal();">{{callDisptnlangTranslation.cancelbtn}}</button>
+                                        <button type="submit" class="btn btn-blue btn-save pull-right" ng-click="saveOrUpdateCallDispostion(callDispositionFormModel)">{{callDisptnlangTranslation.saveBtn}}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Call dispostion modal end -->
+    <div id="delete-confirmation" class="my-modal">
+        <div class="my-modal-content modal-content-minwidth">
+            <div ng-include="'views/partials/delete-confirmation.html'"></div>
+        </div>
+    </div>
+</div>

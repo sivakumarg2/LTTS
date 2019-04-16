@@ -1,0 +1,11 @@
+<div id="remote-disconnected" class="my-modal remote-disconnected">
+	<div id="remote-disconnect-body" ng-class="{'my-modal-content remote-disconnect-body': true}">
+		<div class="modal-box-title">
+				<!-- <label class="lblHeading">{{translation.missedCall}}</label> -->
+				<label class="lblHeading">{{translation.disconnected}}</label>
+				<span class="modal-close close" ng-click="closeRemoteDisconnectedModal()">&times;</span>
+		</div>
+		<div>{{translation.elevator}} {{call.elevator_id}} {{translation.disconnFromRoom}}</div>
+		<button class="btn btn-answer" ng-click="closeRemoteDisconnectedModal()">{{translation.ok}}</button>
+	</div>
+</div>

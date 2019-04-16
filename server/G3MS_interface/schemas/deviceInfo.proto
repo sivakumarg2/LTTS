@@ -1,0 +1,17 @@
+syntax = "proto3";
+package google.protobuf;
+
+message DeviceInfo
+{
+repeated Device devices = 1;
+}
+message Device
+{
+string uuid = 1;
+string unit_number = 2;
+string cpib_device_type = 3;
+uint32 group_id = 4;
+string group_name = 5;
+uint32 building_id = 6;
+string building_name =7;
+}

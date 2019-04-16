@@ -1,0 +1,112 @@
+<div class="country-shutdown-reason-container" ng-controller="countryShutdownReasonController">
+    <div class="save-satus status-msg-fade" ng-show="countryShutdownReasn.status">
+        <p>{{translation.countryCallDispoSaveStatus}}</p>
+    </div>
+    <div class="countrySetting-lbltitle">{{translation.title}}
+        <div class="search-top-input-div div-margin-bottom-search">
+            <input class="search-input-form-control form-control" ng-model="search.searchText"/>
+            <span class="glyphicon-search-top glyphicon glyphicon-search"></span>
+          </div>
+    </div>
+    <!-- Country table start -->
+    <div class="countrysetting-table">
+        <div ng-class="{'table': true, 'bottom-margin': (countryShutdownReasons | filter: search.searchText).length <= 0 }">
+            <div class="table-row">
+                <div class="table-head"><strong>{{translation.code}}</strong></div>
+                <div class="table-head"><strong>{{translation.callDisposition}}</strong></div>
+                <div class="table-head"><strong>{{translation.countryCallDispoModalTranslationLabel}}</strong></div>
+                <div class="table-head"><strong>{{translation.action}}</strong></div>
+            </div>
+            <div class="table-row" ng-repeat="data in countryShutdownReasons | filter: search.searchText | startFrom:currentPage*pageSize | limitTo:pageSize">
+                <div class="table-cell">{{data.code}}</div>
+                <div class="table-cell">{{data.shutdownReason}}</div>
+                <div class="table-cell">{{data.translation}}</div>
+                <div class="table-cell">
+                    <span class="glyphicon glyphicon-pencil" ng-click="editCountryShutdownReason(data);"></span>
+                    <span class="glyphicon glyphicon-trash" ng-click="data.translation != ''? deleteShutdownReason(data.shutdownReasonId): ''"></span>
+                </div>
+            </div>
+        </div>
+        <div class="table-row-empty-new no-record-found" ng-show="(countryShutdownReasons | filter: search.searchText).length <= 0">{{translation.noCountryConfigFound}}</div>
+    </div>
+    <!-- Country table end -->
+    <!-- Country table pageinitation start -->
+    <div ng-show="(countryShutdownReasons | filter: search.searchText).length > pageSize " class="pre-nxt-div ">
+        <button type="button" ng-class="{ 'disable-btn':currentPage==0,'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0"
+            ng-click="currentPage=0">
+            <span class="glyphicon glyphicon-backward"></span></button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage==0, 'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0"
+            ng-click="currentPage=currentPage-1 ">
+            <span class="glyphicon glyphicon-chevron-left"></span></button> {{translation.showing}} {{currentPage+1}}
+        {{translation.of}} {{Math.ceil((countryShutdownReasons | filter: search.searchText).length / pageSize)}} {{translation.pages}}
+        <button type="button" ng-class="{ 'disable-btn':currentPage >= (countryShutdownReasons | filter: search.searchText).length/pageSize - 1,'btn-prnx': currentPage < (countryShutdownReasons | filter: search.searchText).length/pageSize - 1}"
+            ng-disabled="currentPage >= (countryShutdownReasons | filter: search.searchText).length/pageSize - 1" ng-disabled="currentPage == (countryShutdownReasons | filter: search.searchText).length/pageSize - 1"
+            ng-click="currentPage=currentPage+1">
+            <span class="glyphicon glyphicon-chevron-right"></span></button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage >= (countryShutdownReasons | filter: search.searchText).length/pageSize - 1,'btn-prnx': currentPage < (countryShutdownReasons | filter: search.searchText).length/pageSize - 1 }"
+            ng-disabled="currentPage >= (countryShutdownReasons | filter: search.searchText).length/pageSize - 1" ng-click="currentPage =  Math.ceil((countryShutdownReasons | filter: search.searchText).length / pageSize) -1">
+            <span class="glyphicon glyphicon-forward"></span></button>
+    </div>
+    <!-- Country table pageinitation end -->
+    <!-- Call dispostion modal start -->
+    <div id="countryShutdownReasnModal" class="cca-modal">
+        <div class="cca-modal-dialog">
+            <div class="cca-modal-content">
+                <div class="cca-modal-header">
+                    {{translation.countryCallDispoModalHeader}}
+                    <span class="close" ng-click="hideCountryShutdownReasnModal()">&times;</span>
+                </div>
+                <div class="cca-modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 center">
+                            <form class="form-horizontal" novalidate>
+                                <!--Code input start -->
+                                <div class="form-group" ng-class="{'has-error ac-input-feedback': formfieldError.code.hasError}">
+                                    <label for="code" class="col-sm-4">{{translation.code}}</label>
+                                    <div class="col-sm-7">
+                                        <input ng-disabled="disabled" type="text" class="form-control" id="code" ng-value="countryShutdownReasonFormModel.code" />
+                                    </div>
+                                </div>
+                                <!--Code input end-->
+                                <!--  Call Dispostion input start-->
+                                <div class="form-group" ng-class="{'has-error ac-input-feedback': formfieldError.callDisposition.hasError}">
+                                    <label for="callDisposition" class="col-sm-4">{{translation.countryCallDispoModalCallDispositionLabel}}</label>
+                                    <div class="col-sm-7">
+                                        <input ng-disabled="disabled" type="text" class="form-control" id="callDisposition" ng-value="countryShutdownReasonFormModel.shutdownReason"
+                                        />
+                                    </div>
+                                </div>
+                                <!-- Call Dispostion input end -->
+                                <!--  Call Dispostion translation input start-->
+                                <div class="form-group" ng-class="{'has-error ac-input-feedback': formfieldError.hasError}">
+                                    <label for="callDisposition" class="col-sm-4">{{translation.countryCallDispoModalTranslationLabel}}</label>
+                                    <div class="col-sm-7">
+                                        <input ng-model="countryShutdownReasonFormModel.translation" ng-maxlength="100" maxlength="100" type="text" class="form-control"
+                                            id="callDisposition" />
+                                        <span ng-show="formfieldError.hasError" aria-hidden="true" class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+                                        <div class="error-container">
+                                            <span ng-show="formfieldError.hasError">{{formfieldError.message}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Call Dispostion translation input end -->
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 col-sm-5 redirectionItems">
+                                        <button type="button" class="btn btn-grey btn-cancel pull-right" ng-click="hideCountryShutdownReasnModal();">{{translation.countryCallDispoModalCancelBtn}}</button>
+                                        <button type="submit" class="btn btn-blue btn-save pull-right" ng-click="saveOrUpdateCountryShutdownReason(countryShutdownReasonFormModel)">{{translation.countryCallDispoModalSaveBtn}}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Call dispostion modal end -->
+    <div id="delete-confirmation" class="my-modal">
+        <div class="my-modal-content modal-content-minwidth">
+            <div ng-include="'views/partials/delete-confirmation.html'"></div>
+        </div>
+    </div>
+</div>

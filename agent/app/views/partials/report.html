@@ -1,0 +1,170 @@
+<div id="report-layout" class="container-min" ng-controller="reportController">
+  <h4>
+    {{reportTemplateLangTranslation.title}}
+  </h4>
+  <div>
+    <form>
+      <div class="report-filter">
+        <div class="inputgroup">
+          <div class="labelcontrol">
+            <label class="filter-by">{{reportTemplateLangTranslation.filterByLabel}}</label>
+          </div>
+        </div>
+        <div class="inputgroup">
+          <div class="labelcontrol">
+            <label class="building-name">{{reportTemplateLangTranslation.buildingNameLabel}}&nbsp;</label>
+          </div>
+          <div class="inputcontrol">
+            <input maxlength="20" ng-maxlength="20" type="text" class="form-control"
+              ng-model="reportFilter.buildingName" /> </div>
+        </div>
+        <div class="inputgroup">
+          <div class="labelcontrol">
+            <label class="unit-id">{{reportTemplateLangTranslation.unitIdLabel}}&nbsp;</label>
+          </div>
+          <div class="inputcontrol">
+            <input maxlength="20" ng-maxlength="20" type="text" class="form-control" ng-model="reportFilter.unitId" />
+          </div>
+        </div>
+        <div class="inputgroup">
+          <div class="labelcontrol">
+            <label class="agent">{{reportTemplateLangTranslation.agentLabel}}&nbsp;</label>
+          </div>
+          <div class="inputcontrol">
+            <input maxlength="30" ng-maxlength="30" type="text" class="form-control" ng-model="reportFilter.agent" />
+          </div>
+          <!-- <div class="inputcontrol">
+              <button type="button" class="btn search-btn" ng-click="searchReportByFilter(reportFilter)">{{reportTemplateLangTranslation.searchBtn}}&nbsp;</button>
+          </div> -->
+        </div>
+        <div class="inputgroup margin-left">
+          <div class="labelcontrol">
+            <label class="unit-id">{{reportTemplateLangTranslation.inputdate}}&nbsp;</label>
+          </div>
+          <div class="inputcontrol" ng-class="{'input-type-err':reportFilterErrorModel.DateError}">
+            <input type="text" id="datepicker" data-datepicker="{theme: 'flat'}" class="form-control"
+              ng-model="reportFilter.fromDate">
+            <span ng-show="reportFilterErrorModel.DateError" class="err-msg">{{reportFilterErrorModel.DateError}}</span>
+          </div>
+        </div>
+        <div class="inputgroup">
+          <div class="labelcontrol">
+            <label class="unit-id">{{reportTemplateLangTranslation.to}}&nbsp;</label>
+          </div>
+          <div class="inputcontrol" ng-class="{'input-type-err':reportFilterErrorModel.DateError}">
+            <!-- <i ng-show="reportFilterErrorModel.DateError" ng-class="{'icon-align':reportFilterErrorModel.DateError}" class="glyphicon glyphicon-warning-sign"></i> -->
+            <input type="text" id="dateTo" data-datepicker="{theme: 'flat'}" class="form-control"
+              ng-model="reportFilter.toDate">
+          </div>
+        </div>
+        <div class="report-filter report-download pull-right">
+          <div ng-click="exportReport()" class="format-icon">
+            <img src="../../images/reports/excel_icon.png">
+          </div>
+        </div>
+        <div class="inputgroup btn-margin-left">
+          <div class="inputcontrol">
+            <button type="reset" class="btn btn-reset"
+              ng-click="resetFilter()">{{reportTemplateLangTranslation.reset}}</button>
+          </div>
+          <div class="inputcontrol">
+            <button type="button" class="btn search-btn"
+              ng-click="searchReportByFilter(reportFilter)">{{reportTemplateLangTranslation.searchBtn}}&nbsp;</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- Elevator Details Table Starts -->
+  <div id="call-summary-table">
+    <div class="table-row table-header">
+      <div class="table-head" ng-click="sortUsers('elevatorUnitId')">
+        <strong ng-bind="reportTemplateLangTranslation.elevatorIdTbHeader"></strong>
+      </div>
+      <div class="table-head break-word" ng-click="sortUsers('lastUpdatedBy')">
+        <strong ng-bind="reportTemplateLangTranslation.lastUpdateByTBHeader"></strong>
+      </div>
+      <div class="table-head" ng-click="sortUsers('buildingName')">
+        <strong ng-bind="reportTemplateLangTranslation.buildingNameTbHeader"></strong>
+      </div>
+      <div class="table-head" ng-click="sortUsers('floorNumber')">
+        <strong ng-bind="reportTemplateLangTranslation.floorDirectionTBHeader"></strong>
+      </div>
+      <div class="table-head break-word" ng-click="sortUsers('callDisposition')">
+        <strong ng-bind="reportTemplateLangTranslation.calldisposition "></strong>
+      </div>
+      <div class="table-head" ng-click="sortUsers('createdOn')">
+        <strong ng-bind="reportTemplateLangTranslation.createdOn"></strong>
+      </div>
+      <div class="table-head" ng-click="sortUsers('receivedOn')">
+        <strong ng-bind="reportTemplateLangTranslation.assignedOn"></strong>
+      </div>
+      <div class="table-head" ng-click="sortUsers('startedOn')">
+        <strong ng-bind="reportTemplateLangTranslation.connectedOn"></strong>
+      </div>
+      <div class="table-head" ng-click="sortUsers('completedOn')">
+        <strong ng-bind="reportTemplateLangTranslation.completedOn"></strong>
+      </div>
+    </div>
+    <!-- Call Summary Table Starts -->
+    <div class="elevator-details">
+      <div ng-show="filtered.length <= 0 || elevatorDetailsArry.length <= 0"
+        class="collapsable-content no-record-found">{{reportTemplateLangTranslation.noRecordFound}}</div>
+      <div class="collapsable-content"
+        ng-repeat="elevatorDetail in filtered = (elevatorDetailsArry[0] | filter:interalSearch) | orderBy: sortModel.columnName | startFrom:currentPage*pageSize | limitTo:pageSize"
+        ng-class="{ 'tw-table':elevatorDetailsArry.length>10,'ex-table':elevatorDetailsArry[0].length <=10, 'missed-call': elevatorDetail.startedOn == undefined} ">
+        <div class="table-row">
+          <div class="table-cell"
+            ng-click="openViewDetail(elevatorDetail.alarmId)">            
+            <div class="format-icon-initiator display-flex">
+                {{elevatorDetail.elevatorUnitId}}
+              <div class="item-initiator"><img  ng-if="elevatorDetail.initiator == 'Agent'" src="../../images/agent-avatar.png">
+              <img ng-if="elevatorDetail.initiator != 'Agent'" src="../../images/elevator.png">
+              </div>
+            </div>
+          </div>
+          <div class=" table-cell break-word" ng-bind="elevatorDetail.lastUpdatedBy"></div>
+          <div class="table-cell " ng-bind="elevatorDetail.buildingName "></div>
+          <div class="table-cell">{{elevatorDetail.floorNumber}}
+            <span>{{elevatorDetail.direction == "0"? "Down": (elevatorDetail.direction == "1"? "Up": "Stopped")}}</span>
+          </div>
+          <div class="table-cell break-word" ng-bind="elevatorDetail.callDisposition "></div>
+          <div class="table-cell" ng-if="elevatorDetail.createdOn != null"
+            ng-bind="elevatorDetail.createdOn| localeDateTime"></div>
+          <div class="table-cell" ng-if="elevatorDetail.createdOn == null"
+            ng-bind="elevatorDetail.receivedOn| localeDateTime"></div>
+          <div class="table-cell " ng-bind="elevatorDetail.recievedOn| localeDateTime"></div>
+          <div class="table-cell" ng-bind="elevatorDetail.startedOn| localeDateTime"></div>
+          <div class="table-cell" ng-bind="elevatorDetail.completedOn| localeDateTime"></div>
+        </div>
+      </div>
+
+    </div>
+    <!-- Call Summary Table Ends -->
+  </div>
+  <!-- Elevator Details Table Ends -->
+  <div ng-show="elevatorDetailsArry[0].length > 10 " class="pull-right pre-nxt-div ">
+    <button type="button" ng-class="{ 'disable-btn':currentPage==0,'btn-prnx':currentPage != 0 }"
+      ng-disabled="currentPage==0" ng-click="currentPage=0">
+      <span class="glyphicon glyphicon-backward"></span>
+    </button>
+    <button type="button " ng-class="{ 'disable-btn':currentPage==0, 'btn-prnx':currentPage != 0 }"
+      ng-disabled="currentPage==0" ng-click="currentPage=currentPage-1 ">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+    </button> {{reportTemplateLangTranslation.showing}} {{currentPage+(filtered.length > 0? 1: 0)}}
+    {{reportTemplateLangTranslation.of}}
+    {{Math.ceil(filtered.length/10)}} {{reportTemplateLangTranslation.pages}}
+    <button type="button"
+      ng-class="{ 'disable-btn':currentPage >= Math.ceil(filtered.length/10) - 1,'btn-prnx': currentPage < Math.ceil(filtered.length/10) - 1}"
+      ng-disabled="currentPage >= Math.ceil(filtered.length/10) - 1"
+      ng-disabled="currentPage == Math.ceil(filtered.length/10) - 1" ng-click="currentPage=currentPage+1">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+    </button>
+    <button type="button "
+      ng-class="{ 'disable-btn':currentPage >= Math.ceil(filtered.length/10) - 1,'btn-prnx': currentPage < Math.ceil(filtered.length/10) - 1 }"
+      ng-disabled="currentPage >= Math.ceil(filtered.length/10) - 1"
+      ng-click="currentPage =  Math.ceil(filtered.length/10)-1">
+      <span class="glyphicon glyphicon-forward"></span>
+    </button>
+  </div>
+</div>

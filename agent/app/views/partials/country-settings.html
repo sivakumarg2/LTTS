@@ -1,0 +1,363 @@
+<div ng-init="getCountrySetting()" class="country-settings-container" ng-controller="countrycontroller">
+  <!-- <div class="addbtn-row">
+    <button type="button" class="btn btn-blue" ng-disabled="allCountryConfigList[2].length === 1 && currentUser.roleId !== 3"
+      ng-click="addNewCountrySetting()">{{countryConfigLangTranslation.addNewCountrySetting}}</button>
+  </div> -->
+  <div class="countrySetting-lbltitle">{{countryConfigLangTranslation.title}}</div>
+  <div class="addbtn-row">
+    <button type="button" class="btn btn-blue"
+      ng-if="currentUser.roleId === 3 || (allCountryConfigList[2].length == 0 && currentUser.roleId !== 3)"
+      ng-click="addNewCountrySetting()">{{countryConfigLangTranslation.addNewCountrySetting}}</button>
+  </div>
+  <div class="save-satus status-msg-fade">
+    <p ng-show="countrySettings.status">{{countrySettings.message}}</p>
+  </div>
+
+  <!-- Country table start -->
+  <div class="countrysetting-table">
+    <div ng-class="{'table': true, 'bottom-margin': allCountryConfigList[2].length <= 0 }">
+      <div class="table-row"
+        ng-class="{'table-row-empty':(allCountryConfigList[2].length <= 0),'table-row':(allCountryConfigList[2].length > 0)}">
+        <div class="table-head">
+          <strong>{{countryConfigLangTranslation.countryname}}</strong>
+        </div>
+        <div class="table-head">
+          <strong>{{countryConfigLangTranslation.callTimeOut}} ({{countryConfigLangTranslation.seconds}})</strong>
+        </div>
+        <div class="table-head">
+          <strong>{{countryConfigLangTranslation.enableChat}}</strong>
+        </div>
+        <div class="table-head">
+          <strong>{{countryConfigLangTranslation.enableDispo}}</strong>
+        </div>
+        <div class="table-head">
+          <strong>{{countryConfigLangTranslation.mediaRegion}}</strong>
+        </div>
+        <div class="table-head">
+          <strong>{{countryConfigLangTranslation.enableRecording}}</strong>
+        </div>
+        <div class="table-head">
+          <strong>{{countryConfigLangTranslation.recordVideo}}</strong>
+        </div>
+        <div class="table-head">
+          <strong>{{countryConfigLangTranslation.dataRetentionPeriod}} ({{countryConfigLangTranslation.days}})</strong>
+        </div>
+        <div class="table-head">
+          <strong>{{countryConfigLangTranslation.numbers}}</strong>
+        </div>
+        <div class="table-head">
+          <!-- <strong>{{countryConfigLangTranslation.action}}</strong> -->
+        </div>
+      </div>
+      <div class="table-row" ng-repeat="data in allCountryConfigList[2]">
+        <div class="table-cell">{{data.countryName}}</div>
+        <div class="table-cell">{{data.callTimeOut}}</div>
+        <div class="table-cell">
+          <span
+            ng-class="{'glyphicon': true, 'glyphicon-ok': data.enableDataTracks, 'glyphicon-remove': !data.enableDataTracks}"></span>
+        </div>
+        <div class="table-cell">
+          <span
+            ng-class="{'glyphicon': true, 'glyphicon-ok': data.enableCallDispo, 'glyphicon-remove': !data.enableCallDispo}"></span>
+        </div>
+        <div class="table-cell">{{data.mediaRegion}}</div>
+        <div class="table-cell">
+          <span
+            ng-class="{'glyphicon': true, 'glyphicon-ok': data.recordAudio, 'glyphicon-remove': !data.recordAudio}"></span>
+        </div>
+        <div class="table-cell">
+          <span
+            ng-class="{'glyphicon': true, 'glyphicon-ok': data.recordVideo, 'glyphicon-remove': !data.recordVideo}"></span>
+        </div>
+        <div class="table-cell">{{data.days}}</div>
+        <div class="table-cell">
+          <a class="text-align-left" tooltip-placement="bottom" uib-tooltip-template="'redirectionNumbertooltip.html'">
+            <span ng-show="allCountryConfigList[0].length > 0" class="glyphicon glyphicon-list-alt"></span>
+          </a>
+        </div>
+        <div class="table-cell">
+          <span class="glyphicon glyphicon-pencil"
+            ng-click="editCountrySetting(data,(allCountryConfigList[0] | filter:{countryConfigurationId: data.countryConfigurationId}));"></span>
+          <span ng-show="currentUser.roleId === 3" class="glyphicon glyphicon-trash"
+            ng-click="allCountryConfigList[2].length == 1? '': deleteCountrySetting(data.sid);"></span>
+        </div>
+        <script type="text/ng-template" id="redirectionNumbertooltip.html">
+          <span class="text-align-left" ng-repeat="redirectionNo in allCountryConfigList[0] | filter:{countryConfigurationId: data.countryConfigurationId}"><p>{{countryConfigLangTranslation["numberLabel" + ($index+1)]}}. {{redirectionNo.redirectNumber}}</p></span>
+        </script>
+      </div>
+    </div>
+    <div class="table-row-empty-new no-record-found" ng-show="allCountryConfigList[2].length <= 0">
+      {{countryConfigLangTranslation.noRecordFound}}</div>
+  </div>
+
+  <!-- Country table end -->
+  <!-- Country table pageinitation start -->
+
+  <div ng-show="allCountryConfigList.length > pageSize" class="pre-nxt-div ">
+    <button type="button" ng-class="{ 'disable-btn':currentPage==0,'btn-prnx':currentPage != 0 }"
+      ng-disabled="currentPage==0" ng-click="currentPage=0">
+      <span class="glyphicon glyphicon-backward"></span>
+    </button>
+    <button type="button " ng-class="{ 'disable-btn':currentPage==0, 'btn-prnx':currentPage != 0 }"
+      ng-disabled="currentPage==0" ng-click="currentPage=currentPage-1 ">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+    </button> {{countryConfigLangTranslation.showing}} {{currentPage+1}} {{countryConfigLangTranslation.of}}
+    {{numOfPages}} {{countryConfigLangTranslation.pages}}
+    <button type="button"
+      ng-class="{ 'disable-btn':currentPage >= allCountryConfigList.length/pageSize - 1,'btn-prnx': currentPage < allCountryConfigList.length/pageSize - 1}"
+      ng-disabled="currentPage >= allCountryConfigList.length/pageSize - 1"
+      ng-disabled="currentPage == allCountryConfigList.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+    </button>
+    <button type="button "
+      ng-class="{ 'disable-btn':currentPage >= allCountryConfigList.length/pageSize - 1,'btn-prnx': currentPage < allCountryConfigList.length/pageSize - 1 }"
+      ng-disabled="currentPage == mainLogsList.length/pageSize - 1" ng-click="currentPage =  numOfPages -1">
+      <span class="glyphicon glyphicon-forward"></span>
+    </button>
+  </div>
+  <!-- Country table pageinitation end -->
+  <!-- Country setting modal start -->
+  <div id="countrySettingModal" class="cca-modal">
+    <div class="cca-modal-dialog">
+      <div class="cca-modal-content">
+        <div class="cca-modal-header">
+          {{countryConfigLangTranslation.countrysettingModalHeader}}
+          <span class="close" ng-click="hideContrysettingModal()">&times;</span>
+        </div>
+        <div class="cca-modal-body">
+          <div class="row">
+            <div class="col-sm-12 center">
+              <form class="form-horizontal" novalidate>
+                <div class="err-satus" ng-show="countrySettings.errStatus">
+                  <p>{{countryConfigLangTranslation.countrySettingsErrStatus}}</p>
+                </div>
+                <!--  Country name start-->
+                <div class="form-group" ng-init="countryModel.selCountry = currentUser.countryName">
+                  <label for="countryName"
+                    class="col-sm-5">{{countryConfigLangTranslation.countrySettingModalCountryNameLabel}}</label>
+                  <div class="col-sm-6">
+                    <input ng-model="countryModel.selCountry" ng-blur="clearAutoValue(countryModel)" autocomplete="off"
+                      type="text" class="form-control" id="countryName" placeholder="County Name"
+                      ng-disabled="currentUser.roleId == 2 || isEdit" autocomplete="off" typeahead-editable="false"
+                      uib-typeahead="(country.value) for country in loadCountry($viewValue) | limitTo:9"
+                      typeahead-on-select="onSelect($item, $model, $label)"
+                      typeahead-template-url="customTemplate.html">
+                    <div class="error-container"></div>
+                  </div>
+                </div>
+                <!-- Country name end -->
+                <!--Call timeout setting start -->
+                <div class="form-group"
+                  ng-class="{'has-error ac-input-feedback': formfieldError.countryCallTimeoutMsg}">
+                  <label for="timeoutsetting"
+                    class="col-sm-5">{{countryConfigLangTranslation.countrySettingModalTimeOutLabel}}
+                    ({{countryConfigLangTranslation.seconds}})
+                    <span tooltip-placement="top" uib-tooltip="{{countryConfigLangTranslation.tooltip}}"
+                      class="glyphicon glyphicon-info-sign info-icon"></span>
+                  </label>
+                  <div class="col-sm-6">
+                    <input input-constraint max='3' regex='{{timeoutFieldPattern}}'
+                      ng-model="countryModel.countryCallTimeout" autocomplete="off" type="text" class="form-control"
+                      id="timeoutsetting"
+                      placeholder='{{countryConfigLangTranslation.countrySettingModalTimeOutLabel}}' />
+                    <span ng-show="formfieldError.countryCallTimeoutMsg" aria-hidden="true"
+                      class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+                    <div class="error-container">
+                      <span
+                        ng-show="formfieldError.countryCallTimeoutMsg">{{formfieldError.countryCallTimeoutMsg}}</span>
+                    </div>
+                  </div>
+                </div>
+                <!--Call timeout setting end-->
+                <!--dateformat setting start -->
+                <div class="form-group" ng-class="{'has-error ac-input-feedback': formfieldError.countryDateformatMsg}">
+                  <label for="timeoutsetting"
+                    class="col-sm-5">{{countryConfigLangTranslation.dateFormat}}
+                  </label>
+                  <div class="col-sm-6">
+                    <input ng-model="countryModel.dateFormat" style="text-transform: uppercase " autocomplete="off" type="text" class="form-control"
+                      id="dateFormatSetting"
+                      placeholder='DD/MM/YYYY' />
+                    <span ng-show="formfieldError.countryDateformatMsg" aria-hidden="true"
+                      class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+                    <div class="error-container">
+                      <span ng-show="formfieldError.countryDateformatMsg">{{formfieldError.countryDateformatMsg}}</span>
+                    </div>
+                  </div>
+                </div>
+                <!--dateformat setting end-->
+                <!-- Enabling/disabling data tracks starts -->
+                <div class="form-group">
+                  <label class="col-sm-5">
+                    {{countryConfigLangTranslation.enable}}
+                    <!-- {{countryConfigLangTranslation.enableChat}} -->
+                  </label>
+                  <div class="col-sm-6">
+                    <div class="col-sm-5 padding-zero"> {{countryConfigLangTranslation.chat}}
+                      <span tooltip-placement="top" uib-tooltip="{{countryConfigLangTranslation.enableChatMsg}}"
+                        class="glyphicon glyphicon-info-sign info-icon"></span>
+                      <input class="agent-chkbox" type="checkbox" ng-model="countryModel.enableDataTracks" />
+                    </div>
+                    <div class="col-sm-7 padding-zero">
+                      {{countryConfigLangTranslation.disposition}}
+                      <input class="agent-chkbox" type="checkbox" ng-model="countryModel.enableCallDispo" />
+                    </div>
+                  </div>
+                </div>
+                <!-- Enabling/disabling data tracks ends here -->
+                <!-- Enabling/disabling Call dispo -->
+                <!-- <div class="form-group">
+                  <label class="col-sm-5">
+                    {{countryConfigLangTranslation.enableDispo}}
+                  </label>
+                  <div class="col-sm-2">
+                    <input class="agent-chkbox" type="checkbox" ng-model="countryModel.enableCallDispo" />
+                  </div>
+                </div> -->
+                <!-- Enabling/disabling call dispo here -->
+                <!-- Media Region -->
+                <div class="form-group">
+                  <label class="col-sm-5">
+                    {{countryConfigLangTranslation.mediaRegion}}
+                  </label>
+                  <div class="col-sm-6 media-region">
+                    <!-- <input ng-model="countryModel.mediaRegion" ng-blur="bindAutoValue(countryModel)" autocomplete="off" type="text" maxlength="3" class="form-control" id="media-region" placeholder="Region" /> -->
+                    <select ng-class="{'form-control': true, 'drop-down-ctrl':formfieldError.countryMediaRegion}"
+                      name="userStatusId" ng-model="countryModel.mediaRegion">
+                      <option value="">{{countryConfigLangTranslation.select}}</option>
+                      <option ng-repeat="region in MEDIA_REGION" value="{{region.code}}">{{region.value}}</option>
+                    </select>
+                    <span ng-show="formfieldError.countryMediaRegion" aria-hidden="true"
+                      class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+                    <div class="error-container">
+                      <span ng-show="formfieldError.countryMediaRegion">{{formfieldError.countryMediaRegion}}</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- Media Region here -->
+                <!--Call video record enable start-->
+                <div class="form-group">
+                  <label class="col-sm-5">
+                    {{countryConfigLangTranslation.recording}}
+                    <!-- {{countryConfigLangTranslation.recordVideo}} -->
+                  </label>
+                  <div class="col-sm-6">
+                    <div class="col-sm-5 padding-zero">
+                      {{countryConfigLangTranslation.enable}}
+                      <input class="agent-chkbox" type="checkbox"
+                        ng-click="clearEnableVideo(countryModel.enableRecording)"
+                        ng-model="countryModel.enableRecording" />
+                    </div>
+                    <div class="col-sm-7 padding-zero" ng-show="countryModel.enableRecording">
+                      {{countryConfigLangTranslation.recordVideo}}
+                      <span tooltip-placement="top" uib-tooltip="{{countryConfigLangTranslation.recordVideoInfo}}"
+                        class="glyphicon glyphicon-info-sign info-icon"></span>
+                      <input class="agent-chkbox" type="checkbox" ng-model="countryModel.recordVideo" />
+                    </div>
+                  </div>
+                </div>
+                <!--data retention period in days start -->
+                <div ng-show="countryModel.enableRecording" class="form-group"
+                  ng-class="{'has-error ac-input-feedback': formfieldError.dataRetentionPeriod}">
+                  <label for="timeoutsetting" class="col-sm-5">{{countryConfigLangTranslation.dataRetentionPeriod}}
+                    ({{countryConfigLangTranslation.days}})</label>
+                  <div class="col-sm-6">
+                    <input input-constraint max='2' regex='{{timeoutFieldPattern}}'
+                      ng-model="countryModel.dataRetentionPeriod" autocomplete="off" type="text" class="form-control"
+                      id="timeoutsetting" placeholder="Days" />
+                    <span ng-show="formfieldError.dataRetentionPeriod" aria-hidden="true"
+                      class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+                    <div class="error-container">
+                      <span ng-show="formfieldError.dataRetentionPeriod">{{formfieldError.dataRetentionPeriod}}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-5">
+                    {{countryConfigLangTranslation.redirection}}
+                  </label>
+                  <div class="col-sm-6">
+                    <div class="col-sm-5 padding-zero">{{countryConfigLangTranslation.enable}}
+                      <input class="agent-chkbox" type="checkbox" ng-model="countryModel.isRedirectionEnabled" />
+                    </div>
+                    <div class="col-sm-7 padding-zero" style="display:flex" ng-show="countryModel.isRedirectionEnabled">
+                      <span>{{countryConfigLangTranslation.culture}}</span>
+                      <input style="width:65px" ng-model="countryModel.cultureSetting" autocomplete="off" type="text"
+                        class="form-control" id="cultureSettings" placeholder='en-US' />
+                    </div>
+                    <div class="col-sm-7 padding-zero error-container">
+                      <span
+                        ng-show="formfieldError.countrycultureSettingsMsg && countryModel.isRedirectionEnabled">{{formfieldError.countrycultureSettingsMsg}}</span>
+                    </div>
+                  </div>
+                </div>
+                <!--data retention period in days end-->
+                <div class="form-group" ng-class="{'has-error ac-input-feedback': formfieldError.countryFromMsg}"
+                  ng-show="countryModel.isRedirectionEnabled">
+                  <label for="redirection" class="col-sm-5">{{countryConfigLangTranslation.fromNumber}}</label>
+                  <div class="col-sm-6">
+                    <input input-constraint regex='{{redirectionNoPattern}}' max='20' ng-model="fromNo"
+                      autocomplete="off" type="text" class="form-control" id="redirection" ng-trim="false"
+                      placeholder="{{countryConfigLangTranslation.fromNumber}}">
+                    <span ng-show="formfieldError.countryFromMsg" aria-hidden="true"
+                      class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+                    <div class="error-container">
+                      <span ng-show="formfieldError.countryFromMsg">{{formfieldError.countryFromMsg}}</span>
+                    </div>
+                  </div>
+                  <!-- <button type="button" class="btn btn-blue pull-left" ng-click="addRedirection(redirectionNo)">+</button> -->
+                </div>
+                <!-- Re-direction number start  -->
+                <div class="form-group"
+                  ng-class="{'has-error ac-input-feedback': formfieldError.countryRedirectionNoMsg}"
+                  ng-show="countryModel.isRedirectionEnabled">
+                  <label for="redirection"
+                    class="col-sm-5">{{countryConfigLangTranslation.countrySettingModalRedirectionNameLabel}}</label>
+                  <div class="col-sm-6">
+                    <input input-constraint regex='{{redirectionNoPattern}}' max='20' ng-model="redirectionNo"
+                      autocomplete="off" type="text" class="form-control" id="redirection" ng-trim="false"
+                      placeholder="{{countryConfigLangTranslation.countrySettingModalRedirectionNameLabel}}">
+                    <span ng-show="formfieldError.countryRedirectionNoMsg" aria-hidden="true"
+                      class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+                    <div class="error-container">
+                      <span
+                        ng-show="formfieldError.countryRedirectionNoMsg">{{formfieldError.countryRedirectionNoMsg}}</span>
+                    </div>
+                  </div>
+                  <!-- <button type="button" class="btn btn-blue pull-left" ng-click="addRedirection(redirectionNo)">+</button> -->
+                </div>
+                <!-- <div class="form-group">
+                  <div class="col-sm-offset-5 col-sm-7">
+                    <ul class="list-append">
+                      <li ng-repeat="redirection in countryModel.countryRedirectionNo track by $index">
+                        <span class="pull-right" ng-click="deleteRedirection($index)">
+                          <img src="../images/delete_icon.png" />
+                        </span>
+                        <span ng-click="selctdRedirctnNum(redirection,$index);">{{redirection}}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div> -->
+                <!--  Re-direction number end  -->
+                <div class="form-group">
+                  <div class="col-sm-offset-4 col-sm-6 redirectionItems">
+                    <button type="button" class="btn btn-grey btn-cancel pull-right"
+                      ng-click="hideContrysettingModal();">{{countryConfigLangTranslation.countrySettingModalCancelBtn}}</button>
+                    <button type="submit" class="btn btn-blue btn-save pull-right"
+                      ng-click="saveOrUpdateCountrySetting(countryModel)">{{countryConfigLangTranslation.countrySettingModalSaveBtn}}</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Country setting modal end -->
+  <div id="delete-confirmation" class="my-modal">
+    <div class="my-modal-content modal-content-minwidth">
+      <div ng-include="'views/partials/delete-confirmation.html'"></div>
+    </div>
+  </div>
+</div>

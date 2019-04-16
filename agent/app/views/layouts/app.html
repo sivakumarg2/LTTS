@@ -1,0 +1,164 @@
+<!-- Application Layout -->
+<div class="page-body">
+  <audio id="myRingtone" loop>
+    <source src="../sounds/ringtone.mp3" type="audio/mpeg">
+  </audio>
+  <div class="page-body-container container">
+    <div class="unsupported-broser" ng-show="unsupportedBroser">
+      <div>
+        <span>{{"CLOUDOTISLine works only with Chrome browser"}}          
+        </span>        
+      </div>
+    </div>
+    <div class="page-body-row" ng-hide="unsupportedBroser">
+      <!-- Navigation Header Starts-->
+      <nav ng-hide="appData.ccBars.sidebar" class="main-menu fixed-header" ui-view="sidebar">
+        <!-- Navigation Brand Name Starts-->
+        <div class="navbar-brandName verticalright">
+          <h4 class="brandName" href="#">Cloud OTISLINE</h4>
+          </div>
+        <!-- Navigation Brand Name Ends-->
+        <!-- Navigation Menu Items Starts-->
+        <div class="navigation-menu">
+          <ul class="nav-menu menu-bar">
+            <li ng-repeat="mnu in appData.menuHtml" ng-class="{'menui-items verticalright': true, 'menu-active':topBarMenu.menu == mnu.text}">
+              <a ng-init="current=$index" title="{{menuTranslation[mnu.text]}}" click-outside="togglesubmenu=false" ng-click="lay.profile=false;togglesubmenu=true;main.selectedItem=mnu.menu.length;sidemenu.clicked=current;toggleCallElevator(togglesubmenu,mnu.text,topBarMenu);"
+                ui-sref="{{mnu.link}}">
+                <img src="../images/menu_icons/{{topBarMenu.menu == mnu.text? 'selected_': ''}}{{mnu.path}}" />{{menuTranslation[mnu.text]}}
+                <span class="caret" ng-hide="mnu.link != '#' "></span>
+              </a>
+              <!-- Sub menu starts -->
+              <ul class="collapasable-menu" ng-class="{'no-border':mnu.text == 'callelevator', 'sub-menu-active': sidemenu.clicked == current,'sub-menu-active':topBarMenu.subMenu == sub.text}"
+                ng-show="sidemenu.clicked == current && togglesubmenu && (mnu.menu.length>0 || mnu.text == 'callelevator')">
+                <li class="collapasable-items" ng-repeat="sub in mnu.menu">
+                  <a ng-click="disableCallDetails()" ng-class="{'width-100':true, 'sub-menu-active':topBarMenu.subMenu == sub.text,'menu-border': sub.link == '$'}"
+                    ui-sref="{{sub.link}}">{{menuTranslation[sub.text]}}</a>
+                </li>
+                <!-- Call elevator pop-up container starts -->                              
+                <div click-outside="toggles=false" id="div-callback" ng-if="mnu.text == menu.clicked" class="call-elevator onCallElevator-active" ng-show="togglesubmenu">
+                  <h4>{{menuTranslation.callelevator}}</h4>
+                  <div class="call-elevator-inp" ng-class="{'fielderror':callBackElevatorIdField.hasError}">
+                    <!-- <input type="text" class="form-control" ng-model="callBackElevatorIdField.deviceUUID" placeholder="Device UUID" /> -->
+                    <input type="text" class="form-control" ng-model="callBackElevatorIdField.elevatorId" placeholder="Elevator ID" />
+                    <span ng-show="callBackElevatorIdField.hasError" class="glyphicon glyphicon-warning-sign error-icon"></span>
+                    <img ng-show="callBackElevatorIdField.apiCalled" src="../../images/Loading.gif">
+                    <span class="error-container" ng-show="callBackElevatorIdField.hasError">{{callBackElevatorIdField.errorMsg}}</span>
+                  </div>
+                  <div class="call-btn">
+                    <div ng-click="callBackElevator(callBackElevatorIdField.elevatorId,callBackElevatorIdField.deviceUUID)"
+                      class="format-icon">
+                      <img src="../../images/menu_icons/selected_call_elevator.png">
+                    </div>
+                  </div>
+                </div>
+                <!-- Call elevator pop-up container ends -->
+              </ul>
+              <!-- Sub menu ends -->
+            </li>
+          </ul>
+        </div>
+        <span class = "task-count" ng-hide="currentUser.roleId == 3" style="display:none;" id="spnCount">0</span>
+        <!-- Navigation User profile Starts-->
+        <div id="profileSec" ng-class="{'nav-profile verticalleft': true, 'menu-active':topBarMenu.menu == 'account'}">
+          <div class="img-avatar menu-bar" click-outside="lay.profile=false" ng-click="sidemenu.clicked=-1;lay.profile=!lay.profile">
+            <span class="img-agent available" ng-class="{'menu-clicked': true, 'img-agent': true, 'available': agent.selectedStatus == 'Idle', 'in-call': agent.selectedStatus == 'Reserved' || agent.selectedStatus == 'Busy', 'not-available': agent.selectedStatus == 'Offline'}">
+              <img ng-if="currentUser.roleId != 3" src='../images/agent-avatar.png' />
+              <img ng-if="currentUser.roleId == 3" src='../images/admin.png' />
+            </span>
+            <div class="side-agentInfo">
+              <span class="sidebar-agent-name" title="{{currentUser.name}}">{{currentUser.name.length>20? currentUser.name.substr(0, 19) +"...": currentUser.name}}</span><span class="arrow glyphicon glyphicon-triangle-bottom"></span>
+            </div>
+            <ul class="collapasable-menu userProfile-dropdown" ng-class="{'no-border':mnu.text == 'callelevator', 'sub-menu-active': sidemenu.clicked == current,'sub-menu-active':topBarMenu.subMenu == sub.text}"
+              ng-show="lay.profile">
+              <li class="collapasable-items" ng-hide="currentUser.roleId == 3">
+                <a ng-click="disableCallDetails();text='profile'" ng-class="{'sub-menu-active':text=='profile','menu-border': sub.link == '$'}"
+                  ui-sref="user-profile">{{menuTranslation.userProfile}}</a>
+              </li>
+              <li class="collapasable-items">
+                <a ng-click="disableCallDetails();text='password'" ng-class="{'sub-menu-active':text=='password','menu-border': sub.link == '$'}"
+                  ui-sref="change-pwd">{{menuTranslation.changePassword}}</a>
+              </li>
+              <li class="collapasable-items">
+                  <a ng-click="showAbout();disableCallDetails();text='about'" ng-class="{'sub-menu-active':text=='about','menu-border': sub.link == '$'}"
+                  >{{menuTranslation.about}}</a>
+              </li>
+              <li class="collapasable-items">
+                <a ng-click="currentUser.roleId != 3? logoutWorker():logoutAdmin()" ng-class="{'sub-menu-active':topBarMenu.subMenu == sub.text,'menu-border': sub.link == '$'}"
+                  ui-sref="{{sub.link}}">{{menuTranslation.logout}}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- <div ng-click="currentUser.roleId != 3? logoutWorker():logoutAdmin()" class="logout verticalleft manu-bar"> -->
+        <div class="logout verticalleft menu-bar" ng-show="currentUser.roleId != 3">
+          <div ng-show="userStatusDisplay">
+            <select ng-model="agent.selectedStatus" class="sidebar-language" ng-change="changeStatus(agent.selectedStatus)">
+              <option ng-if="!agent.selectedStatus" value="">{{!agent.selectedStatus? 'Loading...': ''}}</option>
+              <option ng-show="status.sId!=='' || status.status==agent.selectedStatus" ng-repeat="status in userStatus" value="{{status.status}}">{{statusTranslation[status.text]}}</option>
+            </select>
+          </div>
+        </div>
+        <!-- Navigation User profile Ends-->
+        <!-- Language Selection Starts-->
+        <div class="language-container" ng-hide="language.length == 1 && currentUser.roleId != 3">
+          <select class="lang-select" ng-model="app.languageShortName" ng-change="saveLanguage(app.languageShortName)">
+            <option ng-repeat="language in language" value="{{language.shortName}}">{{language.name}}</option>
+          </select>          
+        </div>
+        <!-- Language Selection Starts-->
+        <!-- Country Selection Starts-->
+        <!-- ng-options="country.id as country.value for country in countryList" -->
+        <div class="country-container" ng-show='admin'>
+          <select class="lang-select" ng-model="selCountryId" ng-change="saveCountry(selCountryId)">
+            <option ng-repeat="country in countryList" ng-if="country.id!=0" value="{{country.id}}">{{country.value}}</option>
+          </select>
+        </div>
+        <!-- country Selection Ends-->
+      </nav>      
+      <div class="cl-activity" ng-show="main.updateMessage && !appData.ccBars.sidebar">
+        <div>
+          <span ng-show="main.showWarning" class="glyphicon glyphicon-warning-sign blink-me"></span>
+          <span ng-class="{'font-size-17': main.showWarning}">{{main.updateMessage == "2001"? menuTranslation[main.updateMessage]: main.updateMessage}}</span>
+        </div>
+      </div>
+      <div class="cl-message" ng-show="main.commonMessage">
+        <div>
+          <span ng-class="{'font-size-17': main.commonMessage}">{{main.commonMessage}}</span>
+        </div>
+      </div>
+      <div class="cl-activity color-green" ng-show="main.transferMessage">
+        <div>
+          <span ng-class="{'font-size-17': main.showWarning}">{{main.transferMessage}}</span>
+        </div>
+      </div>
+      <!-- Navigation Header Starts-->
+      <div class="content-area  container-min">
+        <div class="main-section">
+          <!-- Content Part -->
+          <div id="content" class="wrap-content">
+            <div ng-show="!callAccept" ui-view="content" class="with-out-call">
+            </div>
+            <ng-include ng-show="callAccept" class="with-call" src="'views/partials/elevator-call-details.html'"></ng-include>
+          </div>
+          <script type="text/ng-template" id="customTemplate.html">
+            <a>
+							<span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                            <span>{{match.model.count}}</span>
+                            </a>
+          </script>
+          <ng-include src="'views/partials/call-notification.html'"></ng-include>
+          <ng-include src="'views/partials/remote-disconnected.html'"></ng-include>
+          <div id="div-about">
+            <ng-include src="'views/partials/app-about.html'"></ng-include>
+          </div>
+          <div ng-hide="appData.ccBars.footer">
+          </div>
+        </div>
+      </div>
+      <!-- This is footer -->
+      <footer ng-hide="appData.ccBars.sidebar" ui-view="sidebar" class="footer">
+        <small id="footer" class="copyright ">&copy; {{APP_CONFIG.copyright}} {{APP_CONFIG.version}}: {{configuration.version}}</small>
+      </footer>
+    </div>
+  </div>
+</div>

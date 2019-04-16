@@ -1,0 +1,17 @@
+{
+  "title": "Question Texts",
+  "priority": "Priority",
+  "questionTexts": "Question Texts",
+  "questionText": "Question Text",
+  "action": "Action",
+  "saveBtn": "Save",
+  "cancelBtn": "Cancel",
+  "translation":"Translation",
+  "emptyQuestionText": "Please enter Question Text translation",
+  "saveStatus": "Question Text saved successfully",
+  "showing": "Showing",
+  "of": "of",
+  "pages": "pages",
+  "noRecordFound": "No records found",
+  "noCountryConfigFound": "No country config found"
+}

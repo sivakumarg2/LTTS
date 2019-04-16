@@ -1,0 +1,9 @@
+﻿{
+  "appInfo": "Info do aplicativo",
+  "appName": "Nome do aplicativo",
+  "appVersion": "Versão do aplicativo",
+  "version": "Versão",
+  "buildDate": "Data de construção",
+  "databaseName": "Nome do banco de dados",
+  "close": "Fechar"
+}

@@ -1,0 +1,698 @@
+<div class="get-elevator-info">
+  <span>{{elevatorInfoStatus}}</span>
+</div>
+<div id="elevator-call-details" ng-controller="elevatorController" class="my-modal1">
+  <div class="current-call-container my-modal-content1">
+    <div ng-class="{'row current-call-flex-color': true, 'current-call-flex': true}">
+      <div ng-show="!home.isCollapse" ng-class="{'col-sm-4':!home.isCollapse, 'panel-collapse':home.isCollapse, 'child-container1 video-panel': true}">
+        <div class="row" ng-show="!callHanged || !home.isCollapse">
+          <div class="col-sm-12">
+            <div class="video-container" ng-show="!home.isCollapse">
+              <div class="video-controls-1">
+                <span click-outside="home.micGain= false;home.firstMic= false" ng-click="home.micGain=!home.micGain;home.firstMic = !home.firstMic; home.firstSpeaker= false;home.volumeChange=false;refreshSlider()">
+                  <img src="images/mic_icon.png" />
+                </span>
+                <div ng-show="home.micGain" class="call-slider mic-slider">
+                  <rzslider rz-slider-model="elevatorControls.micGain" id="micGain" rz-slider-options="elevatorControls.options"></rzslider>
+                  <span class="mic-slider-span">{{elevatorControls.micGain}}</span>
+                </div>
+                <span click-outside="home.volumeChange=false;home.firstSpeaker= false;" ng-click="home.volumeChange=!home.volumeChange;home.firstSpeaker= !home.firstSpeaker;home.micGain=false;home.firstMic= false;refreshSlider();refreshSlider()">
+                  <img src="images/speaker_icon.png" />
+                </span>
+                <div ng-show="home.volumeChange" class="call-slider volume-slider">
+                  <rzslider rz-slider-model="elevatorControls.speakerVolume" id="speakerVolume" rz-slider-options="elevatorControls.options"></rzslider>
+                  <span class="vol-slider-span">{{elevatorControls.speakerVolume}}</span>
+                </div>
+                <span ng-click="video.enabledEle=stopElevatorVideo(video.enabledEle, noElevatorVideo);">
+                  <img ng-show="!video.enabledEle" src="../images/enabled-video.png" />
+                  <img ng-show="video.enabledEle" src="../images/disabled-video.png" />
+                </span>
+                <span class="no-elevator-video" ng-show="noElevatorVideo || video.enabledEle">{{translation.noElevatorVideo}}</span>
+                <span class="no-elevator-video {{video.color}}" ng-show="!video.enabledEle">{{video.frameMessage}}</span>
+                <label class="timealign">{{ callTimings | timeConversion}}</label>
+                <!-- <span title="Video Control1" style="float:right;padding-top: 2px;left: 58px;" ng-show="(!home.isCollapse && !home.isChatCollapse) && (!viewDetails && currentUser.roleId != 3)" ng-click="viewDetails?'':home.isCollapse=!home.isCollapse" ng-class="{'striker-arrow glyphicon':true, 'glyphicon-chevron-left expand':!home.isCollapse, 'glyphicon-chevron-right coll':home.isCollapse}"></span>        -->
+                <!-- <hr> -->
+              </div>
+              <div class="video-controls-2">
+                <div id="remote-media" ng-class="{'no-video-image': noElevatorVideo || video.enabledEle}" class="remote-media"></div>
+                <div id="local-media" ng-class="{'no-video-image': !enabled}" class="circleBase type2 local-media"></div>
+                <div class="call-control">
+                  <span id="video-mute" ng-click="video.enableAgentVideo=!video.enableAgentVideo;muteVideo()">
+                    <img ng-show="video.enableAgentVideo" src="../images/enabled-video.png" />
+                    <img ng-show="!video.enableAgentVideo" src="../images/disabled-video.png" />
+                  </span>
+                  <span id="disconnect" ng-show="false" class="glyphicon glyphicon-earphone" ng-click="hangUpTheCall()"></span>
+                  <span id="call-transfer" class="glyphicon glyphicon-repeat" ng-click="openForwardModal()">
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row stats-container" ng-show="!home.isCollapse">
+          <div class="col-sm-12">
+            <div class="stats-message stats-div">
+              <span ng-click="controls.showStats=!controls.showStats" class="stats-icon glyphicon glyphicon-stats"></span>
+              <div>
+                <div class="in-div">
+                  <div class="inner-addon right-addon" ng-show="controls.showStats">
+                    <div class="stats-message">
+                      <span class="stats-label"></span>
+                      <span class="stats-value"> Remote Stats</span>
+                      <span class="stats-loc-value"> Local Stats</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Dimensions</span>
+                      <span class="stats-value">: {{video.remDimension}}</span>
+                      <span class="stats-loc-value">: {{video.locDimension}}</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Video Codec</span>
+                      <span class="stats-value">: {{video.remVideoCodec}}</span>
+                      <span class="stats-loc-value">: {{video.locVideoCodec}}</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Video Bytes</span>
+                      <span class="stats-value">: {{video.remVideoBytesReceived}}(Received)</span>
+                      <span class="stats-loc-value">: {{video.locVideoBytesReceived}}(Sent)</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Frames Rate</span>
+                      <span class="stats-value">: {{video.remFramesRate}}</span>
+                      <span class="stats-loc-value">: {{video.locFramesRate}}</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Audio Codec</span>
+                      <span class="stats-value">: {{video.remAudioCodec}}</span>
+                      <span class="stats-loc-value">: {{video.locAudioCodec}}</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Audio Bytes</span>
+                      <span class="stats-value">: {{video.remAudioBytesReceived}}(Received)</span>
+                      <span class="stats-loc-value">: {{video.locAudioBytesReceived}}(Sent)</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Jitter</span>
+                      <span class="stats-value">: {{video.locJitter}}</span>
+                      <span class="stats-loc-value">: {{video.remJitter}}</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Pocket(Audio)</span>
+                      <span class="stats-value">: {{video.remAudioPocketReceived}}(Received)</span>
+                      <span class="stats-loc-value">: {{video.locAudioPocketSent}}(Sent)</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Pocket Lost(Audio)</span>
+                      <span class="stats-value">: {{video.remAudioPocketLost}}</span>
+                      <span class="stats-loc-value">: {{video.locAudioPocketLost}}</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">SSRC(Audio)</span>
+                      <span class="stats-value">: {{video.remAudioSSRC}}</span>
+                      <span class="stats-loc-value">: {{video.locAudioSSRC}}</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Round Trip Time(Audio)</span>
+                      <span class="stats-value">: NA</span>
+                      <span class="stats-loc-value">: {{video.locAudioRoundTripTime}}</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Pocket(Video)</span>
+                      <span class="stats-value">: {{video.remPacketsReceived}}(Received)</span>
+                      <span class="stats-loc-value">: {{video.locPacketsSent}}(Sent)</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Pocket Lost(Audio)</span>
+                      <span class="stats-value">: {{video.remPacketsLost}}</span>
+                      <span class="stats-loc-value">: {{video.locPacketsLost}}</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">SSRC(Video)</span>
+                      <span class="stats-value">: {{video.remSSRC}}</span>
+                      <span class="stats-loc-value">: {{video.locSSRC}}</span>
+                    </div>
+                    <div class="stats-message">
+                      <span class="stats-label">Round Trip Time(Video)</span>
+                      <span class="stats-value">: NA</span>
+                      <span class="stats-loc-value">: {{video.locRoundTripTime}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" ng-show="!viewDetails">
+          <div class="col-sm-12">
+            <div class="container-u">
+              <form class="form-horizontal">
+                <div class="form-group">
+                  <label class="pull-left calldisp-left" for="disposition">{{translation.disposition}}</label>
+                  <div class="col-sm-7 div-disposition">
+                    <select ng-model="callDispoDetails.callDispositionId" class="form-control" ng-disabled="callDispoDetails.isTestCall">
+                      <option value="0">{{translation.select}}</option>
+                      <option ng-repeat="status in callDispstnArry | filter: callDispoDetails.filterOnly" value="{{status.callDispositionId}}">{{status.callDisposition}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="cc-container-height">
+                  <span ng-show="dispositionError" class="disp-error">{{dispositionError}}</span>
+                </div>
+                <div class="quality-rating">
+                  <div class="vid-aud-quality-div" ng-class="{'hide-video-quality': !video.auto}">
+                    <p ng-bind="translation.videoQuality"></p>
+                    &nbsp;
+                    <div id="video-quality" class="stars">
+                      <input ng-model="callDispoDetails.videoQuality" ng-disabled="!video.auto" value="5" class="star star-1" id="star-1" type="radio"
+                        name="video" />
+                      <label class="star star-1" for="star-1"></label>
+                      <input ng-model="callDispoDetails.videoQuality" ng-disabled="!video.auto" value="4" class="star star-2" id="star-2" type="radio"
+                        name="video" />
+                      <label class="star star-2" for="star-2"></label>
+                      <input ng-model="callDispoDetails.videoQuality" ng-disabled="!video.auto" value="3" class="star star-3" id="star-3" type="radio"
+                        name="video" />
+                      <label class="star star-3" for="star-3"></label>
+                      <input ng-model="callDispoDetails.videoQuality" ng-disabled="!video.auto" value="2" class="star star-4" id="star-4" type="radio"
+                        name="video" />
+                      <label class="star star-4" for="star-4"></label>
+                      <input ng-model="callDispoDetails.videoQuality" ng-disabled="!video.auto" value="1" class="star star-5" id="star-5" type="radio"
+                        name="video" />
+                      <label class="star star-5" for="star-5"></label>
+                    </div>
+                  </div>
+                  <div class="vid-aud-quality-div">
+                    <span class="span-separator" ng-hide="!video.auto">|</span>
+                    <p ng-bind-html="translation.audioQuality"></p>
+                    &nbsp;
+                    <div id="audio-quality" class="stars">
+                      <input ng-model="callDispoDetails.audioQuality" value="5" class="star star-6" id="star-6" type="radio" name="audio" />
+                      <label class="star star-6" for="star-6"></label>
+                      <input ng-model="callDispoDetails.audioQuality" value="4" class="star star-7" id="star-7" type="radio" name="audio" />
+                      <label class="star star-7" for="star-7"></label>
+                      <input ng-model="callDispoDetails.audioQuality" value="3" class="star star-8" id="star-8" type="radio" name="audio" />
+                      <label class="star star-8" for="star-8"></label>
+                      <input ng-model="callDispoDetails.audioQuality" value="2" class="star star-9" id="star-9" type="radio" name="audio" />
+                      <label class="star star-9" for="star-9"></label>
+                      <input ng-model="callDispoDetails.audioQuality" value="1" class="star star-10" id="star-10" type="radio" name="audio" />
+                      <label class="star star-10" for="star-10"></label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="cc-container-height">
+                  <span class="sel-quality" ng-show="chooseQualityError">{{chooseQualityError}}</span>
+                </div>
+                <div>
+                  <hr class="horz-line">
+                  <label class="col-sm-12 message-box">{{translation.notes}}</label>
+                  <div class="col-sm-12 message-box">
+                    <textarea class="notetextarea form-control" ng-disabled="viewDetails" ng-model="callDispoDetails.notes" ng-trim="false" rows="3"
+                      maxlength="250"></textarea>
+                  </div>
+                  <div class="cc-container-height">
+                    <span class="disp-notes" ng-show="notesError">{{notesError}}</span>
+                  </div>
+                  <div class="col-sm-12 vertical-space">
+                    <span ng-if="textcount.length>=0" class="headertext col-sm-7">{{textcount.length}} of 500 Charaters</span>
+                    <button ng-disabled="viewDetails" class="btn pull-right save-btn" ng-click="saveDispositionDetails(callDispoDetails)">{{translation.saveHangup}}</button>
+                    <!-- <button ng-disabled="viewDetails" style="display:none" class="btn pull-right save-btn" ng-click="openForwardModal()">{{"Transfer Call"}}</button> -->
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <span title="Video Control" ng-show="!(!home.isCollapse && !home.isChatCollapse) && (!viewDetails && currentUser.roleId != 3)" ng-click="viewDetails?'':home.isCollapse=!home.isCollapse" ng-class="{'striker-arrow glyphicon':true, 'glyphicon-chevron-left expand':!home.isCollapse, 'glyphicon-chevron-right coll':home.isCollapse}"></span> -->
+      <div ng-show="!home.isChatCollapse && countryConfig.enableDataTracks == 'true'" ng-class="{'col-sm-3':!home.isChatCollapse, 'panel-collapse':home.isChatCollapse, 'child-container1 chat-panel chat-container-left-space': true}">
+        <div class="row chat-container" ng-show="!home.isChatCollapse">
+          <div class="col-sm-12 chat-pane">
+            <div class="chat-message">
+              <!-- <img  src="../images/chat_bubble.png" /> -->
+              <div class="chat-header">
+                <i ng-class="{'fa fa-comment': true, 'enable-chat': countryConfig.enableDataTracks, 'disable-chat': !countryConfig.enableDataTracks}"
+                  aria-hidden="true"></i>
+                <span class="loading" ng-if="countryConfig.enableDataTracks">{{!dataTrackAdded? translation.loading: ""}}</span>
+              </div>
+              <div class="chat-message-online" id="chatMsgDiv">
+                <div ng-repeat="msg in elevatorChat.messages" class="agent-chatmsg">
+                  <div style="display: flex;" ng-class="{'btm-right':true, 'talk-bubble tri-right':msg.sender != null, 'talk-bubble-left tri-left':msg.sender == null}">
+                    <div>
+                      <img style="width: 33px;margin-top: 36%;;" ng-if="msg.sender == null" src='../images/elevator.png' />
+                    </div>
+                    <div ng-class="{'talktext': true, 'agent-talk': msg.sender != null, 'elevator-talk': msg.sender == null}">
+                      <p>
+                        <span ng-if="msg.sender != null" style="float:left">{{currentUser.name.length>20? currentUser.name.substr(0, 19) +"...": currentUser.name}}</span>
+                        <span ng-if="msg.sender == null" style="float:left;padding-right: 16px;">Elevator</span>
+                        <span style="float:right">{{msg.currTime | date:'hh:mm a' | lowercase }}</span>                        
+                      </p>
+                      <p style="display:inline-block">{{msg.messageText}}</p>
+                    </div>
+                    <div>
+                      <img style="width: 33px;margin-top: 107%;" ng-if="msg.sender != null" src='../images/agent-avatar.png' />
+                    </div>
+                  </div>
+                  <!-- <div ng-class="{'sent-time':msg.sender != null, 'sent-time-left':msg.sender == null }">{{msg.currTime | date:'hh:mm a' | lowercase }}</div> -->
+                </div>
+              </div>
+              <div class="inner-addon right-addon" ng-init="elevator.preMessage=''">
+                <div class="dropdown">
+                  <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{elevator.preMessage == ''? translation.select: elevator.preMessage}}</span>
+                    <i ng-class="{'caret': true, 'caret-align': elevator.preMessage == ''}"></i>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li ng-click="elevator.preMessage='';assignChangeValue('')">
+                      <span>{{translation.select}}</span>
+                    </li>
+                    <li ng-repeat="text in questionText" ng-click="elevator.preMessage=text.questionText;assignChangeValue(text.questionText)">
+                      <span>{{text.questionText}}</span>
+                    </li>
+                  </ul>
+                </div>
+                <i class="glyphicon glyphicon-play" ng-click="addMessage();"></i>
+                <textarea type="text" id="enter" ng-keyup="$event.keyCode == 13 && addMessage()" class="type-message" ng-model="elevator.message"
+                  rows="2" maxlength="250" placeholder="Type a message" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <span title="Chat Control" ng-show="countryConfig.enableDataTracks && !viewDetails && currentUser.roleId != 3" ng-click="viewDetails?'':home.isChatCollapse=!home.isChatCollapse" ng-class="{'striker-arrow glyphicon':true, 'glyphicon-chevron-left expand':!home.isChatCollapse, 'glyphicon-chevron-right coll':home.isChatCollapse}"></span>        -->
+      <div ng-class="{'col-sm-12': viewDetails, 'col-sm-8':!countryConfig.enableDataTracks, 'col-sm-5':countryConfig.enableDataTracks,'child-container2': true}">
+        <h4 class="h4">{{translation.mainHeading}}</h4>
+        <div class="row unit-details">
+          <div ng-class="{'row detail-header': true, 'detail-header-flex':!countryConfig.enableDataTracks}">
+            <div ng-class="{'col-sm-6':!countryConfig.enableDataTracks || viewDetails, 'col-sm-12':countryConfig.enableDataTracks && !viewDetails, 'detail-child':true}">
+              <span class="call-label col-sm-4">{{translation.elevatorId}}:</span>
+              <span class="call-text call-text-span col-sm-8">
+                <!-- <a class="cursor" ng-click="streamAudioVideo(homecontroller.g3msResult.callDetails)">
+                </a> -->
+                {{homecontroller.g3msResult.callDetails.elevatorUnitId}}
+                <div class="call-back-div" ng-hide="!viewDetails || currentUser.roleId == 3" ng-click="callBackElevator(homecontroller.g3msResult.callDetails.elevatorUnitId, 0)"
+                  class="format-icon">
+                  <img src="../../images/menu_icons/selected_call_elevator.png">
+                </div>
+              </span>
+            </div>
+            <div ng-class="{'col-sm-6':!countryConfig.enableDataTracks || viewDetails, 'col-sm-12':countryConfig.enableDataTracks && !viewDetails, 'detail-child':true}">
+              <span class="elevator-label col-sm-4">{{translation.alarmUUID}}:</span>
+              <span class="elevator-text col-sm-8">{{homecontroller.g3msResult.callDetails.isDBGenerated? '--' :homecontroller.g3msResult.callDetails.alarmId}}
+              </span>
+            </div>
+          </div>
+          <div ng-class="{'row detail-header': true, 'detail-header-flex':!countryConfig.enableDataTracks}">
+            <div ng-class="{'col-sm-6':!countryConfig.enableDataTracks || viewDetails, 'col-sm-12':countryConfig.enableDataTracks && !viewDetails, 'detail-child':true}">
+              <span class="call-label col-sm-4">{{translation.contractInfo}}:</span>
+              <span class="call-text call-text-span col-sm-8">
+                {{homecontroller.g3msResult.contractInfo.contractInformation}}&nbsp;({{homecontroller.g3msResult.contractInfo.contractStatus}})
+              </span>
+            </div>
+            <div ng-class="{'col-sm-6':!countryConfig.enableDataTracks || viewDetails, 'col-sm-12':countryConfig.enableDataTracks && !viewDetails, 'detail-child':true}">
+              <span class="elevator-label col-sm-4">{{translation.customer}}:</span>
+              <span class="elevator-text col-sm-8">{{homecontroller.g3msResult.contractInfo.customerName}}</span>
+            </div>
+          </div>
+          <div ng-class="{'row detail-header': true, 'detail-header-flex':!countryConfig.enableDataTracks}">
+            <div ng-class="{'col-sm-6':!countryConfig.enableDataTracks || viewDetails, 'col-sm-12':countryConfig.enableDataTracks && !viewDetails, 'detail-child':true}">
+              <span class="call-label col-sm-4">{{translation.buildingName}}:</span>
+              <span class="call-text col-sm-8">{{homecontroller.g3msResult.contractInfo.buildingName}}
+              </span>
+            </div>
+          </div>
+          <div ng-class="{'row detail-header': true, 'detail-header-flex':!countryConfig.enableDataTracks}">
+            <div ng-class="{'col-sm-6':!countryConfig.enableDataTracks || viewDetails, 'col-sm-12':countryConfig.enableDataTracks && !viewDetails, 'detail-child':true}">
+              <span class="call-label col-sm-4"></span>
+              <span class="elevator-address col-sm-8">{{homecontroller.g3msResult.contractInfo.buildingAddress}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="tab-container">
+          <span ng-click="home.selected=0;" ng-class="{'tab': true, 'selected': home.selected==0, 'not-selected': home.selected!=0}">{{translation.currentCall}}</span>
+          <span ng-click="home.selected=1;" ng-class="{'tab': true, 'selected': home.selected==1, 'not-selected': home.selected!=1}">{{translation.historyCall}}</span>
+        </div>
+        <div ng-class="{'row vertical-spacing': true, 'vertical-spacing-flex': !countryConfig.enableDataTracks || viewDetails}" ng-show="home.selected==0">
+          <div ng-class="{'elevator-detailsmain': true, 'col-sm-12':countryConfig.enableDataTracks && !viewDetails, 'col-sm-6':!countryConfig.enableDataTracks || viewDetails}">
+            <span class="headertext">
+              <!-- <span
+                  class="upperarrowstyle glyphicon glyphicon-triangle-bottom"></span> -->
+              {{translation.unitDetails}}
+              <label class="pull-right" ng-show="dataLoading || dataLoadingG3MS">{{translation.recLoading}}....</label>
+            </span>
+            <div class="row row-main">
+              <span class="labeltext">{{translation.initiator}}</span>:
+              <span class="data-text">{{homecontroller.g3msResult.callDetails.initiator}}</span>
+            </div>
+            <div class="row row-main" ng-show="viewDetails">
+              <span class="labeltext">{{"Call Duration"}}</span>:
+              <span class="data-text">{{homecontroller.g3msResult.callDetails.duration | timeConversion}}</span>
+            </div>
+            <div class="row row-main">
+              <span class="labeltext">{{translation.floorNdirection}}</span>:
+              <span class="data-text">
+                {{incidentDetailsList[0].floorNumber == null? "--": incidentDetailsList[0].floorNumber}}&nbsp;
+                <span>{{incidentDetailsList[0].direction == "0"? translation.down: (incidentDetailsList[0].direction == "1"? translation.up:
+                  translation.Stopped)}}
+                </span>
+              </span>
+            </div>
+            <div class="row row-main">
+              <span class="labeltext">{{translation.failureReason}}</span>:
+              <span class="data-text" ng-if="viewDetails" title="{{homecontroller.g3msResult.contractInfo.failure}}">
+                {{homecontroller.g3msResult.contractInfo.failure == null? "--": (homecontroller.g3msResult.contractInfo.failure.length>50?
+                homecontroller.g3msResult.contractInfo.failure.substr(0, 47) +"...": homecontroller.g3msResult.contractInfo.failure)}}
+              </span>
+              <span class="data-text" ng-if="!viewDetails" title="{{homecontroller.g3msResult.contractInfo.failure}}">
+                {{homecontroller.g3msResult.contractInfo.failure == null? "--": (homecontroller.g3msResult.contractInfo.failure.length>33?
+                homecontroller.g3msResult.contractInfo.failure.substr(0, 30) +"...": homecontroller.g3msResult.contractInfo.failure)}}
+              </span>
+            </div>
+            <div class="row row-main">
+              <span class="labeltext">{{translation.installationMode}}</span>:
+              <span class="data-text">
+                {{homecontroller.g3msResult.contractInfo.commissioningMode == null? "--": homecontroller.g3msResult.contractInfo.commissioningMode}}
+              </span>
+            </div>
+            <div class="call-history-container">
+              <div>
+                <div class="table">
+                  <div class="table-row">
+                    <div class="table-head">
+                      {{translation.activity}}
+                    </div>
+                    <div class="table-head">
+                      {{translation.agent}}
+                    </div>
+                    <div class="table-head">
+                      {{translation.datetime}}
+                    </div>
+                  </div>
+                  <div class="table-row" ng-repeat="his in workerCallHistory">
+                    <div class="table-cell">
+                      {{translation["activity"+ his.activityStatusId]}}
+                    </div>
+                    <div class="table-cell">
+                      <span ng-hide="his.activityStatusId == 8">{{his.name}}</span>
+                    </div>
+                    <div class="table-cell">
+                      {{his.dateTime| localeDateTime}}
+                    </div>
+                  </div>
+                </div>
+                <div class="center-aligned" ng-show="workerCallHistory.length <= 0">{{translation.noRecordFound}}</div>
+              </div>
+            </div>
+          </div>
+          <div ng-class="{'contractInfo-detailsmain-left':!countryConfig.enableDataTracks || viewDetails, 'contractInfo-detailsmain': true, 'col-sm-12':countryConfig.enableDataTracks && !viewDetails, 'col-sm-6':!countryConfig.enableDataTracks || viewDetails}">
+            <span class="headertext">
+              {{translation.map}}</span>
+            <div id="map" style="    margin: 0 1px 0 1px;" ng-class="{'map-viewdetails': viewDetails, 'map-enabled': !viewDetails && countryConfig.enableDataTracks}">
+            </div>
+          </div>
+        </div>
+        <div ng-class="{'div-margin-bottom': true}">
+          <div ng-class="{'row vertical-spacing': true, 'vertical-spacing-flex': !countryConfig.enableDataTracks || viewDetails}" ng-show="home.selected==0">
+            <div ng-class="{'elevator-detailsmain': true, 'map-width':!viewDetails, 'col-sm-12':!countryConfig.enableDataTracks, 'col-sm-6':countryConfig.enableDataTracks}"
+              ng-hide="!viewDetails">
+              <span class="headertext">
+                <!-- <span
+                                class="upperarrowstyle glyphicon glyphicon-triangle-bottom"></span> -->
+                {{translation.dispositionDetails}}
+              </span>
+              <div class="row row-main row-main-disp">
+                <span class="labeltext">{{translation.calldisposition}}</span>:
+                <span ng-class="{'data-text':countryConfig.enableDataTracks , 'data-text-data-disabled':!countryConfig.enableDataTracks}">{{homecontroller.g3msResult.callDetails.callDisposition}}</span>
+              </div>
+              <div class="row row-main row-main-disp">
+                <span class="labeltext">{{translation.callEditVideoQuality}}</span>:
+                <span ng-class="{'data-text':countryConfig.enableDataTracks , 'data-text-data-disabled':!countryConfig.enableDataTracks}">
+                  <span ng-repeat="s in starArray" ng-class="{'fa fa-star': true, 'quality-star':$index+1 <= homecontroller.g3msResult.callDetails.videoQuality}"></span>
+                </span>
+              </div>
+              <div class="row row-main row-main-disp">
+                <span class="labeltext">{{translation.callEditAudioQuality}}</span>:
+                <span ng-class="{'data-text':countryConfig.enableDataTracks , 'data-text-data-disabled':!countryConfig.enableDataTracks}">
+                  <span ng-repeat="s in starArray" ng-class="{'fa fa-star': true, 'quality-star':$index+1 <= homecontroller.g3msResult.callDetails.audioQuality}"></span>
+                </span>
+              </div>
+              <div class="row row-main notes-main">
+                <span class="labeltext">{{translation.notes}}:</span>
+                <span ng-class="{'data-text':countryConfig.enableDataTracks , 'data-text-data-disabled':!countryConfig.enableDataTracks, 'data-text-notes':true}">{{homecontroller.g3msResult.callDetails.notes}}
+                  <!-- {{homecontroller.g3msResult.callDetails}} -->
+                </span>
+              </div>
+            </div>
+            <div ng-class="{'contractInfo-detailsmain-left':countryConfig.enableDataTracks, 'contractInfo-detailsmain chat-block': true, 'col-sm-12':countryConfig.enableDataTracks, 'col-sm-6':!countryConfig.enableDataTracks}"
+              ng-show="countryConfig.enableDataTracks && viewDetails">
+              <span class="headertext">
+                {{translation.chatMessages}}</span>
+
+              <div class="row row-main">
+                <div class="norec-found" ng-hide="homecontroller.g3msResult.callDetails.message">{{translation.noRecordFound}}</div>
+                <div class="chat-message-new">
+                  <div ng-show="msg!=''" ng-repeat="msg in homecontroller.g3msResult.callDetails.message track by $index" class="agent-chatmsg">
+                    <div class="sent-time">{{msg.currTime | date:'hh:mm a' | lowercase }}</div>                    
+                    <div ng-bind-html="msg|separate"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" ng-show="home.selected==1">
+          <div class="grid-container">
+            <div class="vertical-space">
+              <div ng-class="{'table': true, 'bottom-margin': !viewDetails && incidentDetailsList.length == 1}">
+                <div class="table-row">
+                  <div class="table-head">
+                    <strong>{{translation.callId}}</strong>
+                  </div>
+                  <div class="table-head break-word">
+                    <strong>{{translation.name}}</strong>
+                  </div>
+                  <div class="table-head">
+                    <strong>{{translation.initiator}}</strong>
+                  </div>
+                  <div class="table-head">
+                    <strong>{{translation.callDatetime}}</strong>
+                  </div>
+                  <div class="table-head break-word">
+                    <strong>{{translation.calldisposition}}</strong>
+                  </div>
+                  <div class="table-head">
+                    <strong>{{translation.notes}}</strong>
+                  </div>
+                </div>
+                <div class="table-row" ng-class="{'tw-table':incidentDetailsList.length>10,'ex-table':incidentDetailsList.length<=10}" ng-dblclick="viewDetails && currentUser.roleId != 3? openCallForEdit(call): ''"
+                  ng-click="updateCallElevatorDetail(call)" ng-repeat="call in incidentDetailsList | orderBy: sortModel.columnName | startFrom:home.currentPage*pageSize | limitTo:pageSize"
+                  ng-hide="!viewDetails && homecontroller.g3msResult.callDetails.callDetailsId == call.callDetailsId">
+                  <div class="table-cell">
+                    <a ng-if="currentUser.roleId == 2" ng-click="streamAudioVideo(call)">{{call.callDetailsId}}</a>
+                    <span ng-if="currentUser.roleId != 2">{{call.callDetailsId}}</span>
+                  </div>
+                  <div class="table-cell break-word">{{call.name}}</div>
+                  <div class="table-cell">{{call.initiator}}</div>
+                  <div class="table-cell">{{call.receivedOn| localeDateTime}}</div>
+                  <div class="table-cell break-word">{{call.callDisposition}}</div>
+                  <!-- <div class="table-cell">
+                      <a tooltip-placement="bottom" uib-tooltip="{{call.message}}">
+                        <img ng-show="call.message" ng-class="{'ctrl-disable': !call.message}" src="images/message_icon.png" />
+                      </a>
+                    </div> -->
+                  <div class="table-cell">
+                    <a tooltip-placement="bottom" uib-tooltip="{{call.notes}}">
+                      <img ng-show="call.notes" ng-class="{'ctrl-disable': !call.notes}" src="images/note_icon.png" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="table-row-empty-new no-historicall-call-found" ng-show="!viewDetails && incidentDetailsList.length == 1">{{translation.noHistoricallCall}}</div>
+            </div>
+          </div>
+        </div>
+        <div ng-show="incidentDetailsList.length > 10" class="pre-nxt-div">
+          <button type="button" ng-class="{ 'disable-btn':home.currentPage==0,'btn-prnx':home.currentPage != 0 }" ng-disabled="home.currentPage==0"
+            ng-click="home.currentPage=0">
+            <span class="glyphicon glyphicon-backward"></span>
+          </button>
+          <button type="button " ng-class="{ 'disable-btn':home.currentPage==0, 'btn-prnx':home.currentPage != 0 }" ng-disabled="home.currentPage==0"
+            ng-click="home.currentPage=home.currentPage-1 ">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </button> {{translation.showing}} {{home.currentPage+1}} {{translation.of}} {{numOfPages}} {{translation.pages}}
+          <button type="button" ng-class="{ 'disable-btn':home.currentPage >= incidentDetailsList.length/pageSize - 1,'btn-prnx': home.currentPage < incidentDetailsList.length/pageSize - 1}"
+            ng-disabled="home.currentPage >= incidentDetailsList.length/pageSize - 1" ng-disabled="home.currentPage == incidentDetailsList.length/pageSize - 1"
+            ng-click="home.currentPage=home.currentPage+1">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </button>
+          <button type="button " ng-class="{ 'disable-btn':home.currentPage >= incidentDetailsList.length/pageSize - 1,'btn-prnx': home.currentPage < incidentDetailsList.length/pageSize - 1 }"
+            ng-disabled="home.currentPage == incidentDetailsList.length/pageSize - 1" ng-click="home.currentPage =  numOfPages-1">
+            <span class="glyphicon glyphicon-forward"></span>
+          </button>
+        </div>
+        <!-- <div id="map" class="map" ng-show="main.showMap" ng-mouseleave="showLocationMap()">
+          </div> -->
+      </div>
+      <!---{{participantsid}}{{$scope.participant.sid}}-{{$scope.roomDetails}}-->
+      <div class="call-overlay" ng-show="(callAccept && !viewDetails && isRoomNotDisconnected)"></div>
+      <!-- Call Detail Edit modal starts here -->
+      <!-- <div id="callId-edit" class="ccc-modal">
+        <div class="ccc-modal-dialog ccc-modal-medium">
+          <div class="ccc-modal-content callId-edit-content">
+            <div class="ccc-modal-header">
+              {{translation.callEdit}}
+              <span class="close pull-right" ng-click="closeCallForEdit()">&times;</span>
+            </div>
+            <div class="ccc-modal-body">
+              <div class="pop-up-content">
+                <div class="disposition-sel">
+                  <p class="pull-left">{{translation.disposition}}</p>
+                  <div class="select-control">
+                    <select ng-model="editCallItem.callDispositionId" ng-disabled="editCallItem.isTestCall" class="form-control">
+                      <option value="0">{{translation.select}}</option>
+                      <option ng-repeat="status in callDispstnArry" ng-value="{{status.callDispositionId}}">{{status.callDisposition}}</option>
+                    </select>
+                    <div class="error-container error-field-msg">
+                      <p ng-show="dispositionError">{{dispositionError}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="popUp-rating">
+                  <div class="video-call-rating pull-left">
+                    <p class="pull-left" ng-bind="translation.callEditVideoQuality"></p>
+                    <div id="video-quality-popup" class="pull-left rating stars">
+                      <input ng-model="editCallItem.videoQuality" ng-disabled="!video.auto" ng-value="1" class="star star-1" id="star-11" type="radio"
+                        name="video2" />
+                      <label class="star star-11" for="star-11"></label>
+                      <input ng-model="editCallItem.videoQuality ng-disabled=" !video.auto "" ng-value="2" class="star star-2" id="star-22" type="radio"
+                        name="video2" />
+                      <label class="star star-22" for="star-22"></label>
+                      <input ng-model="editCallItem.videoQuality" ng-disabled="!video.auto" ng-value="3" class="star star-3" id="star-33" type="radio"
+                        name="video2" />
+                      <label class="star star-33" for="star-33"></label>
+                      <input ng-model="editCallItem.videoQuality" ng-disabled="!video.auto" ng-value="4" class="star star-4" id="star-44" type="radio"
+                        name="video2" />
+                      <label class="star star-44" for="star-44"></label>
+                      <input ng-model="editCallItem.videoQuality" ng-disabled="!video.auto" ng-value="5" class="star star-5" id="star-55" type="radio"
+                        name="video2" />
+                      <label class="star star-55" for="star-55"></label>
+                    </div>
+                  </div>
+                  <div class="vertical-line"></div>
+                  <div class="audio-call-rating pull-left">
+                    <p class="pull-left" ng-bind="translation.callEditAudioQuality"></p>
+                    <div id="audio-quality-popUp" class="pull-left rating stars">
+                      <input ng-model="editCallItem.audioQuality" ng-value="1" class="star star-6" id="star-66" type="radio" name="audio2" />
+                      <label class="star star-66" for="star-66"></label>
+                      <input ng-model="editCallItem.audioQuality" ng-value="2" class="star star-7" id="star-77" type="radio" name="audio2" />
+                      <label class="star star-77" for="star-77"></label>
+                      <input ng-model="editCallItem.audioQuality" ng-value="3" class="star star-8" id="star-88" type="radio" name="audio2" />
+                      <label class="star star-88" for="star-88"></label>
+                      <input ng-model="editCallItem.audioQuality" ng-value="4" class="star star-9" id="star-99" type="radio" name="audio2" />
+                      <label class="star star-99" for="star-99"></label>
+                      <input ng-model="editCallItem.audioQuality" ng-value="5" class="star star-10" id="star-100" type="radio" name="audio2" />
+                      <label class="star star-100" for="star-100"></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="error-container error-field-msg">
+                  <p ng-show="chooseQualityError">{{chooseQualityError}}</p>
+                </div>
+                <hr class="horz-line">
+                <div class="notes">
+                  <p>{{translation.notes}}</p>
+                  <div class="message">
+                    <textarea class="notetextarea form-control" ng-model="editCallItem.notes" ng-trim="false" rows="3" maxlength="500"></textarea>
+                  </div>
+                </div>
+                <div class="button-container">
+                  <button class="btn ccc-button btn-grey pull-right" ng-click="closeCallForEdit()">{{translation.cancel}}</button>
+                  <button class="btn ccc-button btn-blue pull-right" ng-click="saveDispositionDetails(editCallItem, true)">{{translation.save}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div id="call-forward-modal" class="my-modal call-forward">
+        <div class="call-forward-content my-modal-content row">
+          <div class="call-ford-title">
+            <label class="call-ford-lblHeading">{{translation.callForward}}</label>
+            <span class="cllFrd-close close" ng-click="closeCallForwardModal()">&times;</span>
+          </div>
+          <hr>
+          <div class="cllFrd-msg">
+            <span class="forgot-message flash-msg" ng-show="recover.errMsg" ng-bind-html="recover.errMsg"></span>
+            <span class="flash-msg" ng-show="recover.successMsg" ng-bind-html="recover.successMsg"></span>
+          </div>
+          <div class="forward-title">
+          </div>
+          <div class="content-section">
+            <div class="body-required">
+              <span class="exe-message" ng-show="isTransferError">{{callTransferMsg}}</span>
+            </div>
+            <div class="body-section">
+              <span>{{translation.selectAgent}}</span>
+              <select ng-disabled="!isUserAvailable" ng-model="callTransfer.twilioName" class="form-control">
+                <option value="">{{translation.select}}</option>
+                <option ng-repeat="user in availableUsers" value="{{user.twilioName}}">{{user.name}}</option>
+              </select>
+            </div>
+            <div class="body-required">
+              <span class="span">&nbsp;</span>
+              <i class="required-error" ng-show="user.twilioAgentError" ng-bind-html="user.twilioAgentError"></i>
+            </div>
+            <div class="button-section">
+              <button class="cllFrd-btnSend ok-button" type="button" ng-click="transferCall(callTransfer.twilioName)">{{translation.ok}}</button>
+              <button class="btn btn-default" type="button" ng-click="closeCallForwardModal()">{{translation.cancel}}</button>
+            </div>
+          </div>
+          <form class="forgot-form" ng-show="recover.successMsg">
+            <div class="fgPwd-sucess">
+              <p>{{loginTranslation.temproraryPassMailMsg}}</p>
+              <p>{{loginTranslation.checkMailMsg}}</p>
+            </div>
+            <div class="success-content-section">
+              <button class="fgPwd-btnCancel ok-btn" type="button" ng-click="closePWDModal()">{{loginTranslation.ok}}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="video-streaming" style="display: none;" class="ccc-modal">
+        <div id="stream-video-container">
+          <span class="span-close" ng-click="closeVideoStreaming(media)" role="button" tabindex="0">×</span>
+          <div class="div-loading">
+            <span id="spanLoading">{{videoLoading}}....</span>
+          </div>
+          <div class="agent-remoteVideo-container">
+            <div id="agent-video" class="video-main pull-left">
+              <video type="video/webm" id="streamAgentVideo" preload="metadata" ng-class="{'no-video': noVideoFound}">
+                <audio id="streamAgentAudio" controls="" preload="metadata">
+                  <source type="audio/ogg">
+                </audio>
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div id="remote-video" class="video-main pull-right">
+              <video type="video/webm" id="streamElevatorVideo" preload="metadata" ng-class="{'no-video': noVideoFound}">
+                <audio id="streamElevatorAudio" controls="" preload="metadata">
+                  <source type="audio/ogg">
+                </audio>
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          <div id="controls">
+            <button id="btnPlayPause" class="play" title="Play" accesskey="P" ng-click="playVideo();">
+              <span class="glyphicon glyphicon-play"></span>
+            </button>
+            <button id="btnStop" class="stop" title="Pause" accesskey="X" ng-click="stopVideo();">
+              <span class="glyphicon glyphicon-pause"></span>
+            </button>
+            <!-- <button id="btnPlayPause" class="play" ng-show="false" title="play" accesskey="P" ng-click="playPausedVideo();">Play</button> -->
+          </div>
+          <!-- Video streaming modal starts here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+syntax = "proto3";
+package google.protobuf;
+
+message UnitInformationInput
+{
+    string unit_id= 1;
+}
+
+
+message UnitInformation
+{
+    string unit_id = 1;
+    string car_number= 2;
+    string number_of_landings= 3;
+    string building_name= 4;
+    string contract_number= 5;
+    string customer_name =6;
+	string contract_status =7;
+	string otis_branch=8;
+	string address1 = 9;
+	string address2 = 10;
+	string city = 11;
+	string postal_code = 12;
+}
+
+

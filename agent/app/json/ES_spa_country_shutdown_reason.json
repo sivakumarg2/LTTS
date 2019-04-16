@@ -1,0 +1,19 @@
+{
+  "title": "Motivo de apagado",
+  "code": "código",
+  "callDisposition": "Motivo de apagado",
+  "action": "Acción",
+  "countryCallDispoModalHeader": "Configuración de motivo de cierre de país",
+  "countryCallDispoModalSaveBtn": "Guardar",
+  "countryCallDispoModalCancelBtn": "Cancelar",
+  "countryCallDispoModalCallDispositionLabel": "Motivo de apagado",
+  "countryCallDispoModalTranslationLabel": "La traducción",
+  "translatedCallDispoEmpty": "Por favor ingrese la traducción de la razón de cierre",
+  "countryCallDispoSaveStatus": "La configuración de Motivo de apagado del país se guardó correctamente.",
+  "deletecountryCallDispoSaveStatus": "La configuración de Motivo de apagado del país se eliminó correctamente.",
+  "showing": "demostración",
+  "of": "de",
+  "pages": "páginas",
+  "noRecordFound": "No se encontraron registros",
+  "noCountryConfigFound": "No se encontró ninguna configuración de país"
+}

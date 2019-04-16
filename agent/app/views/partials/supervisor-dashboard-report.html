@@ -1,0 +1,131 @@
+<div class="dashboard-container" ng-controller="SurpervisorReportController">
+  <h5 class="page-title" style="display: flex;font-weight: bold">{{dashboardLangTranslation.byDate}}
+    <div style="display: flex;padding-left: 93px;">
+      <div class="inputgroup margin-left" style="display: flex;">
+        <div class="labelcontrol">
+          <label class="unit-id" style="font-size: 14px;margin-top: 10px;">{{dashboardLangTranslation.from}}&nbsp;</label>
+        </div>
+        <div class="inputcontrol" ng-class="{'input-type-err':reportFilterErrorModel.DateError}">
+          <input type="text" id="datepicker" data-datepicker="{theme: 'flat'}" class="form-control" ng-model="reportFilter.fromDate">
+          <span ng-show="reportFilterErrorModel.DateError" class="err-msg">{{reportFilterErrorModel.DateError}}</span>
+        </div>
+      </div>
+      <div class="inputgroup" style="display: flex;">
+        <div class="labelcontrol">
+          <label class="unit-id" style="font-size: 14px;padding-left: 38px;margin-top: 10px;">{{dashboardLangTranslation.to}}&nbsp;</label>
+        </div>
+        <div class="inputcontrol" ng-class="{'input-type-err':reportFilterErrorModel.DateError}">
+          <!-- <i ng-show="reportFilterErrorModel.DateError" ng-class="{'icon-align':reportFilterErrorModel.DateError}" class="glyphicon glyphicon-warning-sign"></i> -->
+          <input type="text" id="dateTo" data-datepicker="{theme: 'flat'}" class="form-control" ng-model="reportFilter.toDate">
+        </div>
+      </div>
+      <button style="background-color: #0033ab;
+    color: #ffffff;
+    font-weight: bold;
+    height: 33px;
+    margin-left: 15px;" type="button" class="btn search-btn" ng-click="searchReportByFilter(reportFilter)">{{dashboardLangTranslation.search}}</button>
+      <button style="
+    font-weight: bold;
+    height: 33px;
+    margin-left: 15px;" "" type="button" class="btn search-btn" ng-click="searchReportByFilter(reportFilter)">{{dashboardLangTranslation.clear}}</button>
+    </div>
+  </h5>
+  <div class="overview-layout">
+    <table width="80%" style="border-collapse: unset !important; border-spacing: 15px;" cellpadding="5" cellspacing="10">
+      <tr>
+        <td>{{dashboardLangTranslation.incomingCalls}}</td>
+        <td style="padding-right: 23px;">{{agentDateReport.incomingCall}}</td>
+        <td>{{dashboardLangTranslation.missedCalls}}</td>
+        <td style="padding-right: 23px;">{{agentDateReport.missedCall}}</td>
+        <td>{{dashboardLangTranslation.avgCallDuration}}</td>
+        <td>{{agentDateReport.avgCallDuration | timeConversion}}</td>        
+      </tr>
+      <tr>
+        <td>{{dashboardLangTranslation.attendedCalls}}</td>
+        <td style="padding-right: 23px;">{{agentDateReport.attendedCall}}</td>
+        <td>{{dashboardLangTranslation.attendLess30}}</td>
+        <td>{{agentDateReport.attendLess30}}</td>
+        <td>{{dashboardLangTranslation.avgAcceptanceTime}}</td>
+        <td>{{agentDateReport.avgAccptTime | timeConversion}}</td>
+      </tr>      
+    </table>
+  </div>
+  <div id="elevatordetail-container">
+    <!-- Elevator Details controls -->
+    <div class="callsummary-controls">
+      <div>
+        <h5>{{dashboardLangTranslation.byAgent}}</h5>
+      </div>
+      <!-- <button ng-class="{'btn-small today-btn': true, 'active': clicked == 1}" ng-click="clicked=1;todaysDate();">{{dashboardLangTranslation.btnToday}}</button>
+      <button ng-class="{'btn-small prvus-btn': true, 'active': clicked == 0}" ng-click="clicked=0;previousDate();">{{dashboardLangTranslation.btnPrevious}}</button> -->
+      <!-- <div class="search-input ">
+        <input class="inp-form-control form-control" ng-model="search.searchText"/>
+        <span class="glyphicon glyphicon-search"></span>
+      </div>
+      <select class="call-filter-dropdown" ng-model="selectedCallFilter" ng-init="selectedCallFilter = callSummaryDropdown[0].text"
+        ng-change="callChangeFilter(selectedCallFilter)">
+        <option ng-repeat="callFilter in callSummaryDropdown" value="{{callFilter.text}}">{{dashboardLangTranslation[callFilter.text]}}</option>
+      </select> -->
+    </div>
+    <div class="vertical-space">
+    </div>
+    <!-- Elevator Details Table Starts -->
+    <div id="call-summary-table" style=" margin-top: 0;">
+      <div class="table-row table-header">
+        <div class="table-head" ng-click="sortUsers('elevatorUnitId')">
+          <strong>{{dashboardLangTranslation.agentName}}</strong>
+        </div>
+        <div class="table-head" ng-click="sortUsers('initiator')">
+            <strong>{{dashboardLangTranslation.numberOfCalls}}</strong>
+        </div>
+        <div class="table-head" ng-click="sortUsers('customerName')">
+          <strong>{{dashboardLangTranslation.attendLess30}}</strong>
+        </div>
+       
+        <div class="table-head" ng-click="sortUsers('recievedOn')">
+            <strong>{{dashboardLangTranslation.avgAcceptanceTime}}</strong>
+        </div>
+        <div class="table-head break-word" ng-click="sortUsers('lastUpdatedBy')">
+            <strong>{{dashboardLangTranslation.avgCallDuration}}</strong>
+        </div>
+      </div>
+      
+      <!-- Call Summary Table Starts -->
+      <div class="elevator-details">
+        <div ng-show="(agentReportResult).length <= 0" class="collapsable-content no-record-found">{{dashboardLangTranslation.noRecordFound}}</div>
+        <div class="collapsable-content main-row table-row table-header" ng-repeat="report in filtered = (agentReportResult)">
+          <div class="table-row sub-row">
+            <div class="table-cell" ng-bind="report.name"></div>
+            <div class="table-cell"> {{report.missedCall + report.attendedCall}}</div>
+            <div class="table-cell" ng-bind="report.less30"></div>
+            <div class=" table-cell" ng-bind="report.avgAccTime | timeConversion"></div>
+            <div class="table-cell" ng-bind="report.avgCallDuration | timeConversion"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Call Summary Table Ends -->
+
+      <!-- pop up of call back -->
+      <div id="call-back" class="my-modal call-back">
+        <div id="call-notifi-body" ng-class="{'my-modal-content call-notifi-body': true}">
+          <div class="modal-box-title">
+            <label class="lblHeading">{{dashboardLangTranslation.callBackTitle}}</label>
+            <span ng-show="callbackError" class="modal-close close" ng-click="closeCallBackModal()">&times;</span>
+          </div>
+          <hr>
+          <div>{{dashboardLangTranslation.popupHeader}}: {{callbackElevatorId}}</div>
+          <div>
+            <span ng-show="!callbackError">{{dashboardLangTranslation.joining}}</span>
+            <span ng-show="callbackError">{{callbackError}}</span>
+          </div>
+          <div class="action-button">
+            <button ng-click="closeCallBackModal()" ng-disabled="!callbackError">{{dashboardLangTranslation.ok}}</button>
+          </div>
+        </div>
+      </div>
+      <!-- end -->
+    </div>
+    <!-- Elevator Details Table Ends -->
+
+  </div>
+</div>

@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+// Command DisplayText(text)
+// Responds with a return code in rsp.  
+message DisplayText {
+    string text = 1;
+    Response rsp = 2;
+    enum Response {
+        RSP_NONE = 0;
+        RSP_SUCCESS = 1;
+        RSP_NO_CURRENT_CALL = 2;
+        RSP_ERROR = 3;
+    }
+}
+
+// Command AdjustVolume(percentage)
+// Responds with a return code in rsp.  
+message AdjustVolume {
+    uint32 percentage = 1;
+    Response rsp = 2;
+    enum Response {
+        RSP_NONE = 0;
+        RSP_SUCCESS = 1;
+        RSP_NO_CURRENT_CALL = 2;
+        RSP_OUT_OF_RANGE = 3;
+        RSP_ERROR = 4;
+        RSP_TIMEOUT = 5;
+    }
+}
+
+// Command AdjustMicrophone(percentage)
+// Responds with a return code in rsp.  
+message AdjustMicrophone {
+    uint32 percentage = 1;
+    Response rsp = 2;
+    enum Response {
+        RSP_NONE = 0;
+        RSP_SUCCESS = 1;
+        RSP_NO_CURRENT_CALL = 2;
+        RSP_OUT_OF_RANGE = 3;
+        RSP_ERROR = 4;
+        RSP_TIMEOUT = 5;
+    }
+}
+
+// Command JoinRoom(roomname)
+// Responds with a return code in rsp.  
+// If rsp = RSP_CURRENTLY_IN_CALL a list of participants currently in
+// the call wil be returned in the already_in_room parameter
+message JoinRoom {
+    string roomname = 1;
+    Response rsp = 2;
+    repeated string already_in_room = 3;
+    string sip_uri = 4;
+    enum Response {
+        RSP_NONE = 0;
+        RSP_SUCCESS = 1;
+        RSP_CURRENTLY_IN_CALL = 2;
+        RSP_ERROR = 3;
+    }
+}
+
+// Root level message
+message CCCMessage {
+    DisplayText display_text = 1;
+    AdjustVolume adjust_volume = 2;
+    AdjustMicrophone adjust_microphone = 3;
+    JoinRoom join_room = 4;
+}

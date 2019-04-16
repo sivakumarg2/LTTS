@@ -1,0 +1,47 @@
+<!-- pop up of about -->
+<div id="app-about" class="my-modal app-about">
+    <div id="app-about-body" ng-class="{'my-modal-content app-about-body': true}">
+        <div class="modal-box-title">
+            <label class="lblHeading">{{aboutTranslation.appInfo}}</label>
+            <span class="modal-close close" ng-click="hideAbout()">&times;</span>
+        </div>
+        <hr>
+        <div class="item-container">
+            <div class="child-container">
+                <span class="item-label">{{aboutTranslation.appName}}</span>
+                <span>: {{aboutInfo.appName}}</span>
+            </div>
+            <div class="child-container">
+                <span class="item-label">{{aboutTranslation.appVersion}}</span>
+                <span>: {{aboutInfo.appVersion}}</span>
+            </div>
+        </div>
+        <div class="item-container">
+            <div class="child-container">
+                <span class="item-label">{{aboutTranslation.version}}</span>
+                <span>: {{aboutInfo.version}}</span>
+            </div>
+            <div class="child-container">
+                <span class="item-label">{{aboutTranslation.buildDate}}</span>
+                <span>: {{aboutInfo.buildDate}}</span>
+            </div>
+        </div>
+        <div class="item-container">
+            <span class="item-label">{{aboutTranslation.databaseName}}</span>
+            <span>: {{aboutInfo.dbName}}</span>
+        </div>
+        <div class="item-container">
+            <span class="item-label">{{"G3MS"}}</span>
+            <span>: {{aboutInfo.g3ms}}</span>
+        </div>
+        <div class="item-container">
+            <span class="item-label">{{"CIMS"}}</span>
+            <span>: {{aboutInfo.cims}}</span>
+        </div>
+        <hr>
+        <div class="action-button">
+            <button ng-click="hideAbout()" >{{aboutTranslation.close}}</button>
+        </div>
+    </div>
+</div>
+<!-- end -->

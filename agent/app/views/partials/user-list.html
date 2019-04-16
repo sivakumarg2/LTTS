@@ -1,0 +1,85 @@
+<div class="userdetails-panel panel" ng-controller="userController">
+  <div class="userdetails-lbltitle">{{agentTranslation.titleName}}</div>
+  <div class="userdetails-lblheader status-msg-fade" ng-show="operationMsg"><span>{{operationMsg}}</span></div>
+  <div class="userdetails-content">
+    <div class="userdetails-button row">
+      <input type="button" class="userdetails-addbtn btn" ng-click="editUserflag.status=false;newUser()" value="{{agentTranslation.newUser}}"
+      />
+      <div class="search-top-input-div div-padding-right">
+        <input class="search-input-form-control-big form-control" ng-model="search.searchText"/>
+        <span class="gly-right glyphicon-search-top-big glyphicon glyphicon-search"></span>
+      </div>
+      <div class="agent-filter">
+      <label class="agent-lblStatus" for="Status">{{agentTranslation.status}}</label>
+      <select class="agent-lblstatus-dropdown" name="userStatusId" ng-model="selectedUserFilter" ng-init="selectedUserFilter = userFilterStatus[1].text" ng-change="userFilter(selectedUserFilter)">
+          <option ng-repeat="status in userFilterStatus" value="{{status.text}}">{{agentTranslation[status.text]}}</option>
+      </select>      
+    </div>
+    </div>
+    <div ng-show="status.display">
+      <h4>{{status.message}}</h4>
+    </div>
+    <div class="userdetails-table">
+      <div class="vertical-space">
+        <div ng-class="{'table': true, 'bottom-margin': (userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length <= 0 }">
+          <div ng-class="{'table-row':true}">
+            <div class="table-head" ng-click="sortUsers('name')"><strong>{{agentTranslation.agentName}}</strong></div>
+            <div class="table-head" ng-click="sortUsers('emailId')"><strong>{{agentTranslation.emailID}}</strong></div>
+            <div class="table-head" ng-click="sortUsers('location')"><strong>{{agentTranslation.location}}</strong></div>
+            <div class="table-head" ng-click="sortUsers('roleName')"><strong>{{agentTranslation.roles}}</strong></div>
+            <div class="table-head" ng-click="sortUsers('userStatus')"><strong>{{agentTranslation.status}}</strong></div>
+            <!-- <div class="table-head"><strong>{{agentTranslation.action}}</strong></div> -->
+            <div class="table-head"><strong></strong></div>
+          </div>
+          <!-- <div class="no-record-found" ng-show="userList.length <= 0">{{agentTranslation.noRecordFound}}</div> -->
+          <div class="table-row" ng-class="{'tw-table':(userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length>10,'ex-table':(userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length<=10}" ng-repeat="user in (userList | filter:{countryId:selectedCountryId} | filter: search.searchText) | orderBy: sortModel.columnName | startFrom:currentPage*pageSize | limitTo:pageSize | filter:{countryId:selectedCountryId} | filter: search.searchText">
+            <div class="table-cell">{{user.name}}</div>
+            <div class="table-cell">{{user.emailId}}</div>
+            <div class="table-cell">{{user.countryName}}</div>
+            <div class="table-cell">{{agentTranslation[user.roleName+"1"]}}</div>
+            <div class="table-cell">{{agentTranslation[user.userStatus]}}</div>
+            <div class="table-cell">
+              <div style="width: 34px;">
+                  <span class="glyphicon glyphicon-pencil" ng-click="editUser(user);"></span>
+                  <span ng-show="user.isLocked == 'Y'" class="glyphicon glyphicon-lock" ng-click="unlockUser(user);"></span>
+                  <!-- <span class="glyphicon glyphicon-trash" ng-click="(user.userStatus =='Retired' || user.userID == currentUser.userID)?'':openDeleteModal(user);"></span> -->
+                  <!-- <div class="table-cell"></div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table-row-empty-new no-record-found" ng-show="(userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length <= 0">{{agentTranslation.noRecordFound}}</div>
+      </div>
+      <div ng-show="(userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length > pageSize" class="pre-nxt-div ">
+        <button type="button" ng-class="{ 'disable-btn':currentPage==0,'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0"
+          ng-click="currentPage=0">
+                <span class="glyphicon glyphicon-backward"></span>
+              </button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage==0, 'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0"
+          ng-click="currentPage=currentPage-1 ">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </button> {{agentTranslation.showing}} {{currentPage+1}} {{agentTranslation.of}} {{Math.ceil((userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length / pageSize)}} {{agentTranslation.pages}}
+        <button type="button" ng-class="{ 'disable-btn':currentPage >= (userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length/pageSize - 1,'btn-prnx': currentPage < (userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length/pageSize - 1}"
+          ng-disabled="currentPage >= (userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length/pageSize - 1" ng-disabled="currentPage == (userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length/pageSize - 1"
+          ng-click="currentPage=currentPage+1">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage >= (userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length/pageSize - 1,'btn-prnx': currentPage < (userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length/pageSize - 1 }"
+          ng-disabled="currentPage >= (userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length/pageSize - 1" ng-click="currentPage =  Math.ceil((userList | filter:{countryId:selectedCountryId} | filter: search.searchText).length / pageSize) -1">
+                <span class="glyphicon glyphicon-forward"></span>
+            </button>
+      </div>
+
+      <div id="delete-confirmation" class="my-modal">
+        <div class="my-modal-content modal-content-minwidth">
+          <div ng-include="'views/partials/delete-confirmation.html'"></div>
+        </div>
+      </div>
+
+      <div id="agent-configuration" class="my-modal">
+        <div class="my-modal-content modal-content-minwidth">
+          <div ng-include="'views/partials/agent-configuration.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>

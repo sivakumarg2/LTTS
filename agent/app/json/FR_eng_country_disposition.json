@@ -1,0 +1,19 @@
+{
+  "title": "Call Disposition",
+  "code": "Code",
+  "callDisposition": "Call Disposition",
+  "action": "Action",
+  "countryCallDispoModalHeader": "Country Call Disposition Settings",
+  "countryCallDispoModalSaveBtn": "Save",
+  "countryCallDispoModalCancelBtn": "Cancel",
+  "countryCallDispoModalCallDispositionLabel": "Call Disposition",
+  "countryCallDispoModalTranslationLabel":"Translation",
+  "translatedCallDispoEmpty": "Please enter call disposition translation",
+  "countryCallDispoSaveStatus": "Country Call Disposition settings saved successfully !!",
+  "deletecountryCallDispoSaveStatus": "Country Call Disposition settings deleted successfully !!",
+  "showing": "Showing",
+  "of": "of",
+  "pages": "pages",
+  "noRecordFound": "No records found",
+  "noCountryConfigFound": "No country config found"
+}

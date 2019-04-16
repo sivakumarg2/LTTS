@@ -1,0 +1,470 @@
+<div ng-controller="troubleshootController" class="trouble-shoot-container" ng-init="logName = 'exceptionLog'">
+    <!--    <h4>{{translation.title}}</h4>-->
+    <div class="head-border-style">
+        <div class="row">
+            <div class="col-md-12 vertical-space">
+                <div class="fields-div">
+                    <div class="col-sm-4">
+                        <h5 for="EmailId">{{translation.emailId}}</h5>
+                    </div>
+                    <div class="col-sm-3">
+                        <h5 for="ElevatorUnitId">{{translation.elevatorId}}</h5>
+                    </div>
+                    <div class="col-sm-3">
+                        <h5 for="AlarmId">{{translation.alarmId}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 vertical-space">
+                <div class="fields-div">
+                    <div class="col-sm-4 inner-addon-err-msg left-addon">
+                        <i ng-show="troubleshootErrModel.emailErrMsg" ng-class="{'icon-align':troubleshootErrModel.emailErrMsg}" class="glyphicon glyphicon-warning-sign"></i>
+                        <input type="text" class="form-control" ng-model="troubleshootData.emailId" ng-class="{'input-type-err':troubleshootErrModel.emailErrMsg}"
+                            placeholder="bruce_smith@otis.com" maxlength="50">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" ng-model="troubleshootData.elevatorUnitId" placeholder="8XHFR44" maxlength="30" onkeypress="return event.charCode >= 48 && event.charCode <= 122">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" ng-model="troubleshootData.alarmId" placeholder="Alarm ID" maxlength="100">
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-search" ng-click="retrieveLogDetails(troubleshootData);">
+                            <span class="glyphicon glyphicon-search"></span>{{translation.search}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vertical-space-errmsg"></div>
+        <div class="row">
+            <div class="col-md-12 vertical-space">
+                <div class="fields-div">
+                    <div class="col-sm-5">
+                        <span class="err-msg" ng-show="troubleshootErrModel.emailErrMsg" ng-bind-html="troubleshootErrModel.emailErrMsg"></span>
+                    </div>
+                    <div class="col-sm-5">
+                        <span class="err-msg" ng-show="troubleshootErrModel.unitIDErrMsg" ng-bind-html="troubleshootErrModel.unitIDErrMsg">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 vertical-space">
+                <div class="fields-div">
+                    <div class="col-sm-4">
+                        <h5 for="to">{{translation.columMethodName}}</h5>
+                    </div>
+                    <div class="col-sm-3">
+                        <h5 for="datefrom">{{translation.inputdate}}</h5>
+                    </div>
+                    <div class="col-sm-3">
+                        <h5 for="to">{{translation.to}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 vertical-space">
+                <div class="fields-div">
+                    <form>
+                        <div class="col-sm-4 inner-addon right-addon">
+                            <input type="text" id="methodName" class="form-control" ng-model="troubleshootData.methodName">
+                        </div>
+                        <div class="col-sm-3 inner-addon right-addon">
+                            <input type="text" id="datepicker" data-datepicker="{theme: 'flat'}" class="form-control" ng-model="troubleshootData.fromDate">
+                        </div>
+                        <div class="col-sm-3 inner-addon right-addon">
+                            <input type="text" id="dateTo" data-datepicker="{theme: 'flat'}" class="form-control" ng-model="troubleshootData.toDate">
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="reset" class="btn btn-reset" ng-click="reset();">
+                                <span class="glyphicons glyphicons-repeat"></span>{{translation.reset}}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="tab">
+        <button class="tablinks" ng-class="{'active':logName === 'exceptionLog'}" ng-click="logName='exceptionLog';showList(0);currentPage=0;">{{translation.exceptionLogData}}</button>
+        <button class="tablinks" ng-class="{'active':logName === 'messageLog'}" ng-click="logName='messageLog';showList(4);currentPage=0;">{{translation.messageLogData}}</button>
+        <button class="tablinks" ng-class="{'active':logName === 'activityLog'}" ng-click="logName='activityLog';showList(1);currentPage=0;">{{translation.activityLogData}}</button>
+        <button class="tablinks" ng-class="{'active':logName === 'twilioLog'}" ng-click="logName='twilioLog';showList(2);currentPage=0;">{{translation.twilioLogData}}</button>
+        <button class="tablinks" ng-class="{'active':logName === 'twilioRoomLog'}" ng-click="logName='twilioRoomLog';showList(3);currentPage=0;">{{"Room Logs"}}</button>
+    </div>
+    <div class="vertical-space-tab"></div>
+    <div id="exceptionLog" ng-show="logName == 'exceptionLog'">
+        <div class="vertical-space">
+            <div ng-class="{'table': true, 'bottom-margin': (mainLogsList | startFrom:currentPage*pageSize | limitTo:pageSize).length <= 0 }">
+                <div class="table-row">
+                    <div class="table-head">
+                        <strong>{{translation.columExceId}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columElevatorId}}</strong>
+                    </div>
+                    <div class="table-head break-word">
+                        <strong>{{translation.name}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columMethodName}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columServer}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columContext}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columCreatedOn}}</strong>
+                    </div>
+                </div>
+                <div class="table-row" ng-class="{'tw-table':mainLogsList.length>10,'ex-table':mainLogsList.length<=10}" ng-repeat="data in mainLogsList | startFrom:currentPage*pageSize | limitTo:pageSize"
+                    ng-click="openLoggingModal(data,0)">
+                    <div class="table-cell">{{data.exceptionId}}</div>
+                    <div class="table-cell">{{data.elevatorId}}</div>
+                    <div class="table-cell break-word">{{data.name}}</div>
+                    <div class="table-cell">{{data.methodName}}</div>
+                    <div class="table-cell">
+                        <span ng-class="{'glyphicon': true, 'glyphicon-ok': data.IsServer, 'glyphicon-remove': !data.IsServer}"></span>
+                    </div>
+                    <div class="table-cell log-context">{{data.exceptionDetails}}</div>
+                    <div class="table-cell">{{data.dateCreated | date:'dd/MM/yyyy h:mm:ss a'}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="exceptionLog" ng-show="logName == 'messageLog'">
+        <div class="vertical-space">
+            <div ng-class="{'table': true, 'bottom-margin': (mainLogsList | startFrom:currentPage*pageSize | limitTo:pageSize).length <= 0 }">
+                <div class="table-row">
+                    <div class="table-head">
+                        <strong>{{translation.columnMsgId}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columElevatorId}}</strong>
+                    </div>
+                    <div class="table-head break-word">
+                        <strong>{{translation.name}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columMethodName}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columServer}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columContext}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columCreatedOn}}</strong>
+                    </div>
+                </div>
+                <div class="table-row" ng-class="{'tw-table':mainLogsList.length>10,'ex-table':mainLogsList.length<=10}" ng-repeat="data in mainLogsList | startFrom:currentPage*pageSize | limitTo:pageSize"
+                    ng-click="openLoggingModal(data,0)">
+                    <div class="table-cell">{{data.exceptionId}}</div>
+                    <div class="table-cell">{{data.elevatorId}}</div>
+                    <div class="table-cell break-word">{{data.name}}</div>
+                    <div class="table-cell">{{data.methodName}}</div>
+                    <div class="table-cell">
+                        <span ng-class="{'glyphicon': true, 'glyphicon-ok': data.IsServer, 'glyphicon-remove': !data.IsServer}"></span>
+                    </div>
+                    <div class="table-cell log-context">{{data.exceptionDetails}}</div>
+                    <div class="table-cell">{{data.dateCreated | date:'dd/MM/yyyy h:mm:ss a'}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="activityLog" ng-show="logName == 'activityLog'">
+        <div class="vertical-space">
+            <div ng-class="{'table': true, 'bottom-margin': ((mainLogsList|filter:search) | startFrom:currentPage*pageSize | limitTo:pageSize).length <= 0 }">
+                <div class="table-row">
+                    <div class="table-head">
+                        <strong>{{translation.columActivityId}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columElevatorId}}</strong>
+                    </div>
+                    <div class="table-head break-word">
+                        <strong>{{translation.name}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columActivityName}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columCreatedOn}}</strong>
+                    </div>
+                </div>
+                <div class="table-row" ng-class="{'tw-table':mainLogsList.length>10,'ex-table':mainLogsList.length<=10}" ng-repeat="data in mainLogsList | startFrom:currentPage*pageSize | limitTo:pageSize"
+                    ng-click="openLoggingModal(data,1)">
+                    <div class="table-cell">{{data.activityId}}</div>
+                    <div class="table-cell">{{data.elevatorId}}</div>
+                    <div class="table-cell break-word">{{data.name}}</div>
+                    <div class="table-cell">{{data.activityName}}</div>
+                    <div class="table-cell">{{data.dateCreated | date:'dd/MM/yyyy h:mm:ss a'}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="twilioLog" ng-show="logName == 'twilioLog'">
+        <div class="vertical-space">
+            <div ng-class="{'table': true, 'bottom-margin': ((mainLogsList|filter:search) | startFrom:currentPage*pageSize | limitTo:pageSize).length <= 0 }">
+                <div ng-class="{'table-row': true }">
+                    <div class="table-head">
+                        <strong>{{translation.columTwilioLogId}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columElevatorId}}</strong>
+                    </div>
+                    <div class="table-head break-word">
+                        <strong>{{translation.name}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columEventType}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columResourceType}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columEventDescription}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{translation.columCreatedOn}}</strong>
+                    </div>
+                </div>
+                <div class="table-row" ng-class="{'rTable':mainLogsList.length>10,'ex-table':mainLogsList.length<=10}" ng-repeat="data in filtered =(mainLogsList|filter:search) | startFrom:currentPage*pageSize | limitTo:pageSize"
+                    ng-click="openLoggingModal(data,2)">
+                    <div class="table-cell">{{data.TwilioLogId}}</div>
+                    <div class="table-cell">{{data.elevatorId}}</div>
+                    <div class="table-cell break-word">{{data.name}}</div>
+                    <div class="table-cell">{{data.EventType}}</div>
+                    <div class="table-cell">{{data.ResourceType}}</div>
+                    <div class="table-cell log-context">{{EventDescription}}</div>
+                    <div class="table-cell">{{data.DateCreated | date:'dd/MM/yyyy h:mm:ss a'}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="twilioLog" ng-show="logName == 'twilioRoomLog'">
+        <div class="vertical-space">
+            <div ng-class="{'table': true, 'bottom-margin': ((mainLogsList|filter:search) | startFrom:currentPage*pageSize | limitTo:pageSize).length <= 0 }">
+                <div ng-class="{'table-row': true }">
+                    <div class="table-head">
+                        <strong>{{"Room Log ID"}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{"Room Name"}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{"Room Status"}}</strong>
+                    </div>
+                    <div class="table-head break-word">
+                        <strong>{{"Event Type"}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{"Participant Status"}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{"Track Kind"}}</strong>
+                    </div>
+                    <div class="table-head">
+                        <strong>{{"Date Time"}}</strong>
+                    </div>
+                </div>
+                <div class="table-row" ng-class="{'rTable':mainLogsList.length>10,'ex-table':mainLogsList.length<=10}" ng-repeat="data in filtered =(mainLogsList|filter:search) | startFrom:currentPage*pageSize | limitTo:pageSize"
+                    ng-click="openLoggingModal(data,3)">
+                    <div class="table-cell log-context">{{data.twilioRoomLogId}}</div>
+                    <div class="table-cell">{{data.roomName}}</div>
+                    <div class="table-cell">{{data.roomStatus}}</div>
+                    <div class="table-cell break-word">{{data.statusCallbackEvent}}</div>
+                    <div class="table-cell">{{data.participantStatus}}</div>
+                    <div class="table-cell">{{data.trackKind}}</div>
+                    <div class="table-cell">{{data.dateCreated | date:'dd/MM/yyyy h:mm:ss a'}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-row-empty-new no-record-found" ng-show="mainLogsList.length <= 0">
+        {{translation.norecordsFound}}
+    </div>
+    <div ng-show="mainLogsList.length > pageSize" class="pre-nxt-div ">
+        <button type="button" ng-class="{ 'disable-btn':currentPage==0,'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0"
+            ng-click="currentPage=0">
+            <span class="glyphicon glyphicon-backward"></span>
+        </button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage==0, 'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0"
+            ng-click="currentPage=currentPage-1 ">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </button> {{translation.showing}} {{currentPage+1}} {{translation.of}} {{numberOfPages}} {{translation.pages}}
+        <button type="button" ng-class="{ 'disable-btn':currentPage >= mainLogsList.length/pageSize - 1,'btn-prnx': currentPage < mainLogsList.length/pageSize - 1}"
+            ng-disabled="currentPage >= mainLogsList.length/pageSize - 1" ng-disabled="currentPage == mainLogsList.length/pageSize - 1"
+            ng-click="currentPage=currentPage+1">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage >= mainLogsList.length/pageSize - 1,'btn-prnx': currentPage < mainLogsList.length/pageSize - 1 }"
+            ng-disabled="currentPage == mainLogsList.length/pageSize - 1" ng-click="currentPage =  numberOfPages -1">
+            <span class="glyphicon glyphicon-forward"></span>
+        </button>
+    </div>
+    <div id="logging-modal" class="my-modal">
+        <div class="my-modal-content">
+            <div class="log-title">
+                <span class="close" ng-click="closeLoggingModal()">&times;</span>
+            </div>
+            <div ng-if="logItem.log === 0">
+                <div class="content-section">
+                    <div>
+                        <h3>{{translation.excLog}}</h3>
+                        <hr class="horizontal-line">
+                        <div class="modal-body">
+                            <div class="col-sm-12 top-border-body">
+                                <label class="col-sm-3">{{"Log ID"}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.exceptionId}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{translation.columMethodName}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.methodName}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{translation.columCreatedOn}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.dateCreated | date:'dd/MM/yyyy h:mm:ss a'}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{translation.columServer}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">
+                                    <span ng-class="{'glyphicon': true, 'glyphicon-ok': logItem.item, 'glyphicon-remove': !logItem.item}"></span>
+                                </span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{translation.columContext}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8"> {{logItem.item.exceptionDetails}}</span>
+                            </div>
+                            <div class="log-title">
+                                <span class="btn" ng-click="closeLoggingModal()">close</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="logItem.log === 1">
+                <div class="content-section">
+                    <div>
+                        <h3>{{translation.actLog}}</h3>
+                        <hr class="horizontal-line">
+                        <div class="modal-body">
+                            <div class="col-sm-12 top-border-body">
+                                <label class="col-sm-3">{{translation.columActivityId}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.activityId}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{translation.columActivityName}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.activityName}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{translation.columCreatedOn}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.dateCreated | date:'dd/MM/yyyy h:mm:ss a'}}</span>
+                            </div>
+                            <div class="log-title">
+                                <span class="btn" ng-click="closeLoggingModal()">close</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="logItem.log === 2">
+                <div class="content-section">
+                    <div>
+                        <h3>{{translation.twilLog}}</h3>
+                        <hr class="horizontal-line">
+                        <div class="modal-body">
+                            <div class="col-sm-12 top-border-body">
+                                <label class="col-sm-3">{{translation.modalPopupColumTaskID}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.TwilioLogId}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{translation.modalPopupColumTaskDetails}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.TaskDetails}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{translation.modalPopupColumTaskAge}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.TaskDetails[0].TaskAge}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{translation.modalPopupColumWorkDetails}} </label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.WorkerDetails}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{translation.columCreatedOn}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8"> {{logItem.item.DateCreated | date:'dd/MM/yyyy h:mm:ss a'}}</span>
+                            </div>
+                            <div class="log-title">
+                                <span class="btn" ng-click="closeLoggingModal()">close</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="logItem.log === 3">
+                <div class="content-section">
+                    <div>
+                        <h3>{{"Room Log"}}</h3>
+                        <hr class="horizontal-line">
+                        <div class="modal-body">
+                            <div class="col-sm-12 top-border-body">
+                                <label class="col-sm-3">{{"Room ID"}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.twilioRoomLogId}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{"Room Name"}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.roomName}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{"Room Status"}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.roomStatus}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{"Event Type"}} </label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.statusCallbackEvent}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{"Participant Status"}} </label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8">{{logItem.item.participantStatus}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-sm-3">{{"Date Time"}}</label>
+                                <span class="col-sm-1">-</span>
+                                <span class="col-sm-8"> {{logItem.item.dateCreated | date:'dd/MM/yyyy h:mm:ss a'}}</span>
+                            </div>
+                            <div class="log-title">
+                                <span class="btn" ng-click="closeLoggingModal()">close</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

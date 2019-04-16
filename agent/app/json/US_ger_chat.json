@@ -1,0 +1,23 @@
+{
+  "codeFormLabel": "Priorität",
+  "chatFormLabel": "Fragetext",
+  "codeTbleHeading": "Priorität",
+  "chatHeading": "Fragetext",
+  "actionTblHeading": "Aktion",
+  "addNewChat": "+ Neuer Fragetext",
+  "saveChatStatus": "Fragetext erfolgreich gespeichert",
+  "deleteChatStatus": "Fragetext erfolgreich gelöscht",
+  "chatModalTitle": "Fragetext",
+  "codeFieldEmpty": "Bitte geben Sie Priorität ein",
+  "chatFieldEmpty": "Bitte geben Sie Fragetext ein",
+  "okbtn": "Ok",
+  "cancelbtn": "Stornieren",
+  "saveBtn": "Sparen",
+  "showing": "Zeigen",
+  "of": "von",
+  "pages": "seiten",
+  "chatCodeDuplicate":"Fragetext existiert bereits",
+  "noRecordFound": "Keine Aufzeichnungen gefunden",
+  "isTestCall": "Testanruf",
+  "title":"Fragetexte"
+}

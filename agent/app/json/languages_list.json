@@ -1,0 +1,58 @@
+﻿{
+	"languages": [
+		{
+			"id": 1,
+			"countryId": 1,
+			"shortName": "eng",
+			"name": "USA / English"
+		},
+		{
+			"id": 2,
+			"countryId": 1,
+			"shortName": "ger",
+			"name": "USA / Deutsche"
+		},
+		{
+			"id": 3,
+			"countryId": 2,
+			"shortName": "ger",
+			"name": "Germany / Deutsche"
+		},
+		{
+			"id": 8,
+			"countryId": 2,
+			"shortName": "eng",
+			"name": "Germany / English"
+		},
+		{
+			"id": 4,
+			"countryId": 3,
+			"shortName": "fre",
+			"name": "France / Français"
+		},
+		{
+			"id": 6,
+			"countryId": 3,
+			"shortName": "por",
+			"name": "France / Português"
+		},
+		{
+			"id": 7,
+			"countryId": 3,
+			"shortName": "eng",
+			"name": "France / English"
+		},
+		{
+			"id": 5,
+			"countryId": 5,
+			"shortName": "spa",
+			"name": "Spain / Español"
+		},
+		{
+			"id": 9,
+			"countryId": 5,
+			"shortName": "eng",
+			"name": "Spain / English"
+		}
+	]
+}

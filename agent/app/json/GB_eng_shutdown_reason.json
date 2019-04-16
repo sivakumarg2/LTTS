@@ -1,0 +1,23 @@
+{
+  "codeFormLabel": "Code",
+  "shutdownReasonFormLabel": "Shutdown Reason",
+  "codeTbleHeading": "Code",
+  "shutdownReasonTblHeading": "Shutdown Reason",
+  "actionTblHeading": "Action",
+  "addNewShutdownReason": "+ New Shutdown Reason",
+  "shutdownReasonSaveStatus": "Shutdown Reason saved successfully",
+  "deleteShutdownReasonStatus": "Shutdown Reason deleted successfully",
+  "shutdownReasonModalTitle": "Shutdown Reason",
+  "codeFieldEmpty": "Please enter shutdown reason code",
+  "shutdownReasonFieldEmpty": "Please enter shutdown reason",
+  "okbtn": "Ok",
+  "cancelbtn": "Cancel",
+  "saveBtn": "Save",
+  "showing": "Showing",
+  "of": "of",
+  "pages": "pages",
+  "shutdownReasonCodeDuplicate":"Shutdown Reason code already exist",
+  "noRecordFound": "No records found",
+  "isTestCall": "Test Call",
+  "title":"Shutdown Reason"
+}

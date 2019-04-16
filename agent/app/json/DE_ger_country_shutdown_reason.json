@@ -1,0 +1,19 @@
+{
+  "title": "Abschaltgrund",
+  "code": "Code",
+  "callDisposition": "Abschaltgrund",
+  "action": "Aktion",
+  "countryCallDispoModalHeader": "Ländereinstellungen für das Herunterfahren",
+  "countryCallDispoModalSaveBtn": "Speichern",
+  "countryCallDispoModalCancelBtn": "Abbrechen",
+  "countryCallDispoModalCallDispositionLabel": "Abschaltgrund",
+  "countryCallDispoModalTranslationLabel": "traduction",
+  "translatedCallDispoEmpty": "Bitte geben Sie Shutdown Reason-Übersetzung ein",
+  "countryCallDispoSaveStatus": "Country Shutdown Reason Einstellungen erfolgreich gespeichert !!",
+  "deletecountryCallDispoSaveStatus": "Country Shutdown Grundeinstellungen erfolgreich gelöscht !!",
+  "showing": "Zeigen",
+  "of": "von",
+  "Seiten": "Seiten",
+  "noRecordFound": "Keine Datensätze gefunden",
+  "noCountryConfigFound": "Keine Länderkonfiguration gefunden"
+}

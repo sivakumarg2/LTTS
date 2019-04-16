@@ -1,0 +1,17 @@
+{
+  "title": "Textos de preguntas",
+  "priority": "Prioridad",
+  "questionTexts": "Textos de preguntas",
+  "questionText": "Texto de pregunta",
+  "action": "Acción",
+  "saveBtn": "Guardar",
+  "cancelBtn": "Cancelar",
+  "translation": "La traducción",
+  "emptyQuestionText": "Por favor ingrese la traducción del texto de pregunta",
+  "saveStatus": "Texto de pregunta guardado con éxito",
+  "showing": "demostración",
+  "of": "de",
+  "pages": "páginas",
+  "noRecordFound": "No se encontraron registros",
+  "noCountryConfigFound": "No se encontró ninguna configuración de país"
+}

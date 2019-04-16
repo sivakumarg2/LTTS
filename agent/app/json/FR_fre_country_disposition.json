@@ -1,0 +1,19 @@
+{
+  "title": "Appelez la disposition",
+  "code": "code",
+  "callDisposition": "Appelez la disposition",
+  "action": "Action",
+  "countryCallDispoModalHeader": "Paramètres de disposition d'appel de pays",
+  "countryCallDispoModalSaveBtn": "Enregistrer",
+  "countryCallDispoModalCancelBtn": "Annuler",
+  "countryCallDispoModalCallDispositionLabel": "Appelez la disposition",
+  "countryCallDispoModalTranslationLabel": "traduction",
+  "translatedCallDispoEmpty": "Veuillez saisir la traduction de la disposition des appels",
+  "countryCallDispoSaveStatus": "Paramètres CountryCallDisposition enregistré des pistes !!",
+  "deletecountryCallDispoSaveStatus": "Paramètres d'élimination des appels par pays supprimés",
+  "showing": "Montrer",
+  "of": "de",
+  "pages": "pages",
+  "noRecordFound": "Aucun enregistrement trouvé",
+  "noCountryConfigFound": "Aucune configuration de pays trouvée"
+}

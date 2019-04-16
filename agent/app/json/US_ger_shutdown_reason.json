@@ -1,0 +1,23 @@
+{
+  "codeFormLabel": "Code",
+  "shutdownReasonFormLabel": "Abschaltgrund",
+  "codeTbleHeading": "Code",
+  "shutdownReasonTblHeading": "Abschaltgrund",
+  "actionTblHeading": "Aktion",
+  "addNewShutdownReason": "+ Neuer Abschaltgrund",
+  "shutdownReasonSaveStatus": "Shutdown Reason wurde erfolgreich gespeichert",
+  "deleteShutdownReasonStatus": "Shutdown Reason wurde erfolgreich gelöscht",
+  "shutdownReasonModalTitle": "Abschaltgrund",
+  "codeFieldEmpty": "Bitte geben Sie den Beendigungsgrundcode ein",
+  "shutdownReasonFieldEmpty": "Bitte geben Sie Abschaltgrund ein",
+  "okbtn": "Ok",
+  "cancelbtn": "Stornieren",
+  "saveBtn": "Sparen",
+  "showing": "Zeigen",
+  "of": "von",
+  "pages": "seiten",
+  "shutdownReasonCodeDuplicate":"Shutdown Reason-Code ist bereits vorhanden",
+  "noRecordFound": "Keine Aufzeichnungen gefunden",
+  "isTestCall": "Testanruf",
+  "title":"Abschaltgrund"
+}

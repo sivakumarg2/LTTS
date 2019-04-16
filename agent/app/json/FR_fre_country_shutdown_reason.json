@@ -1,0 +1,19 @@
+{
+  "title": "Raison d'arrêt",
+  "code": "code",
+  "callDisposition": "Raison d'arrêt",
+  "action": "Action",
+  "countryCallDispoModalHeader": "Paramètres de raison d'arrêt du pays",
+  "countryCallDispoModalSaveBtn": "Enregistrer",
+  "countryCallDispoModalCancelBtn": "Annuler",
+  "countryCallDispoModalCallDispositionLabel": "Raison d'arrêt",
+  "countryCallDispoModalTranslationLabel": "traduction",
+  "translatedCallDispoEmpty": "Veuillez entrer la traduction Shutdown Reason",
+  "countryCallDispoSaveStatus": "Les paramètres Reason du pays ont été sauvegardés avec succès !!",
+  "deletecountryCallDispoSaveStatus": "Les paramètres Reason du pays ont été supprimés avec succès !!",
+  "showing": "Montrer",
+  "of": "de",
+  "pages": "pages",
+  "noRecordFound": "Aucun enregistrement trouvé",
+  "noCountryConfigFound": "Aucune configuration de pays trouvée"
+}

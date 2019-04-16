@@ -1,0 +1,21 @@
+<div ng-controller="ReportController">
+    <div class="row-div">
+        <div class="agent-div col-md-3">
+            <select class="agent-dropdown">
+            <option class="agent-drpValues" ng-repeat="user in userList">{{user}}</option>
+        </select>
+        </div>
+        <div class="elevator-div col-md-3">
+            <select class="elevator-dropdown">
+            <option class="elevator-drpValues" ng-repeat="elevator in elevatorList">{{elevator}}</option>
+        </select>
+        </div>
+        <div class="callStatus-div col-md-3">
+            <select class="callStatus-dropdown">
+            <option class="callStatus-drpValues" ng-repeat="callStatus in callStatusList">{{callStatus}}</option>
+        </select>
+        </div>
+        <div class="search-div col-md-3">
+            <button type="button" ng-click="" class="agent-btnsave btn-success">Search</button>
+        </div>
+    </div>

@@ -1,0 +1,6 @@
+{
+  "idle": "Available",
+  "reserved": "Reserved",
+  "busy": "Busy",
+  "offline": "Not Available"
+}

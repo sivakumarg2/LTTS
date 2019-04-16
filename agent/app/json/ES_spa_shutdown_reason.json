@@ -1,0 +1,23 @@
+{
+  "codeFormLabel": "Kode",
+  "shutdownReasonFormLabel": "Motivo de apagado",
+  "codeTbleHeading": "Kode",
+  "shutdownReasonTblHeading": "Motivo de apagado",
+  "actionTblHeading": "Acción",
+  "addNewShutdownReason": "+ Nueva razón de cierre",
+  "shutdownReasonSaveStatus": "Motivo de cierre guardado con éxito",
+  "deleteShutdownReasonStatus": "Motivo de cierre borrado con éxito",
+  "shutdownReasonModalTitle": "Motivo de apagado",
+  "codeFieldEmpty": "Por favor ingrese el código de razón de apagado",
+  "shutdownReasonFieldEmpty": "Por favor ingrese el motivo de cierre",
+  "okbtn": "De acuerdo",
+  "cancelbtn": "Avbryt",
+  "saveBtn": "Lagre",
+  "showing": "Viser",
+  "of": "av",
+  "pages": "sider",
+  "shutdownReasonCodeDuplicate":"El código de razón de cierre ya existe",
+  "noRecordFound": "No se encontrarón archivos",
+  "isTestCall": "Prueba de llamada",
+  "title":"Motivo de apagado"
+}

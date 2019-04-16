@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="styles/vendor/cp-call.css">
+<div ng-controller="SyncPOCController">
+    <div id="controls" style="width:100%;left:0">
+        <div id="preview" style="width:41%">
+            <!-- <div class="div-heading">Elevator</div> -->
+            <div ng-init="doc.syncName='france_test'">
+                <table ng-show="!isSubscribed">
+                    <tr>
+                        <td>
+                            <input ng-model="doc.syncName" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input value="Subscribe" type="button" style="width:100px" ng-click="subscribeToSync()" />
+                        </td>
+                    </tr>
+                </table>
+                <table ng-show="isSubscribed">
+                    <tr>
+                        <td>
+                            Message:
+                            <input ng-model="doc.message" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input value="Send" type="button" style="width:100px" ng-click="sendMessage()" />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <div id="elevator-info" class="myChat" style="width:25%">
+            <table>
+                <tr>
+                    <td>
+                        Sync Message:
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="
+                                        height: 184px;
+                                        overflow: scroll;
+                                        width: 500px;    border-color: black;
+                                        border-width: 1px;
+                                        border-style: solid;" id="pAppend"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</div>

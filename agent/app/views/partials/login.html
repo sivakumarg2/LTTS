@@ -1,0 +1,144 @@
+<div ng-controller="loginController" class="login">
+    <div class="login-maindiv">
+        <div class="login-header">
+            <span>OTIS</span>
+        </div>
+        <div class="login-main" ng-show="isLogin == 0">
+            <div class="login-central-error">
+                <span class="login-msg" ng-hide="resetMessage" ng-bind-html="resetMessage"></span>
+                <span class="login-msg" ng-show="login.errMsg" ng-bind-html="login.errMsg"></span>
+            </div>
+
+            <form class="form-signin" name="loginForm" ng-submit="userLogin()">
+                <section class="control-content">
+                    <span>
+                        <input autocomplete="off" placeholder="Email ID" name="email" autofocus ng-model="loginModel.emailId" class="login-input form-control inner-addon-err-msg left-addon"
+                            ng-class="{'input-type-err':login.loginError}" type="text" id="input-email" min="5" maxlength="40"
+                        />
+                        <span ng-show="login.loginError" class="glyphicon glyphicon-warning-sign"></span>
+                        <span ng-class="{'login-error': true, 'empty-login-error': !login.loginError}">
+                            <span ng-show="login.loginError" ng-bind-html="login.loginError"></span>
+                        </span>
+
+                    </span>
+                </section>
+                <section class="control-content">
+                    <span>
+                        <input ng-model="loginModel.password" placeholder="password" name="passward" min="6" maxlength="30" class="login-input form-control inner-addon-err-msg left-addon"
+                            ng-class="{'input-type-err':login.passwordError}" type="password" id="input-pwd" />
+                        <span ng-show="login.passwordError" class="glyphicon glyphicon-warning-sign"></span>
+                        <span class="login-error" ng-show="login.passwordError" ng-bind-html="login.passwordError"></span>
+                    </span>
+                </section>
+                <section class="login-redirect">
+                    <div class="left-section">
+                        <input type="checkbox" id="Rememberme" name="Remember me" ng-model="rememberFlag" /><label class="overrid-label" for="Rememberme">{{loginTranslation.rememberme}}</label>
+                    </div>
+                    <div class="right-section">
+                        <a type="button" ng-click="openPWDModal()">{{loginTranslation.forgotPassword}}</a>
+                    </div>
+                </section>
+                <button id="btnLogin">
+                    {{loginTranslation.login}}
+                </button>
+                <span class="login-copyright">&copy; {{APP_CONFIG.copyright}}</span>
+            </form>
+        </div>
+        <div class="login-main" ng-show="isLogin == 1">
+            <div class="login-central-error">
+                <span class="login-msg" ng-hide="resetMessage" ng-bind-html="resetMessage"></span>
+                <span class="login-msg" ng-show="login.errMsg" ng-bind-html="login.errMsg"></span>
+            </div>
+            <form class="form-signin" name="loginForm" ng-submit="changeUserPassword()" method="post">
+                <section class="control-content change-pwd">
+                    <span>
+                        <input ng-model="loginModel.newPassword" placeholder="New Password" name="passward" min="6" maxlength="30" class="login-input form-control inner-addon-err-msg left-addon"
+                            ng-class="{'input-type-err':login.newPasswordError}" type="password" id="input-new-pwd" />
+                        <span ng-show="login.newPasswordError" class="glyphicon glyphicon-warning-sign"></span>
+                        <span class="login-error" ng-show="login.newPasswordError">{{login.newPasswordError}}
+                            <i tooltip-placement="left" uib-tooltip="{{loginTranslation.validPasswordFormatMsg}}"
+                                class="glyphicon glyphicon-info-sign info-icon"></i>
+                        </span>
+                    </span>
+                </section>
+                <section class="control-content change-pwd">
+                    <span>
+                        <input ng-model="loginModel.confirmPassword" placeholder="Confirm Password" name="passward" min="6" maxlength="30" class="login-input form-control inner-addon-err-msg left-addon"
+                            ng-class="{'input-type-err':login.confirmPasswordError}" type="password" id="input-conf-pwd" />
+                        <span ng-show="login.confirmPasswordError" class="glyphicon glyphicon-warning-sign"></span>
+                        <span class="login-error" ng-show="login.confirmPasswordError" ng-bind-html="login.confirmPasswordError"></span>
+                    </span>
+                </section>
+                <button>
+                    {{loginTranslation.changePassword}}
+                </button>
+                <span class="login-copyright">&copy; {{APP_CONFIG.copyright}}</span>
+            </form>
+        </div>
+
+        <div class="login-main" ng-show="isLogin == 2">
+            <form class="form-signin" name="loginForm" ng-submit="changeUserPassword()" method="post">
+                <section class="control-content change-pwd">
+                    <span ng-show="!login.errMsg" style="color: white;font-size:23px">
+                        {{loginTranslation.validatingLink}}
+                    </span>
+                    <span ng-show="login.errMsg" style="color: red;font-size:15px">
+                        {{loginTranslation.linkExpired}}
+                        <br/>
+                        <br/>
+                        <a ng-click="gotoLogin()">{{loginTranslation.clickHere}}</a>
+                    </span>
+                </section>
+                <section class="control-content change-pwd">
+                </section>
+                <section class="control-content change-pwd">
+                </section>
+                <section class="control-content change-pwd">
+                </section>
+                <span class="login-copyright">&copy; {{APP_CONFIG.copyright}}</span>
+            </form>
+        </div>
+    </div>
+
+    <div id="forgot-password-modal" class="my-modal forgot-password">
+        <div class="forgot-password-content my-modal-content row">
+            <div class="fgPwd-pwd-title">
+                <label class="fgPwd-pwd-lblHeading">{{loginTranslation.recoverTitle}}</label>
+                <span class="fgPwd-close close" ng-click="closePWDModal()">&times;</span>
+            </div>
+            <hr>
+            <form ng-submit="forgotPassword(loginModel.recoverEmailID)" class="forgot-form" ng-hide="recover.successMsg">
+                <div class="fgPwd-msg">
+                    <span class="forgot-message flash-msg" ng-show="recover.errMsg" ng-bind-html="recover.errMsg"></span>
+                    <span class="flash-msg" ng-show="recover.successMsg" ng-bind-html="recover.successMsg"></span>
+                </div>
+                <div class="forgot-title">
+                    <!-- <span>{{loginTranslation.forgotPasswordTitle}}</span> -->
+                    <span>{{loginTranslation.plsEnterIDToSendLink}}</span>
+                </div>
+                <div class="content-section">
+                    <input autocomplete="off" autofocus ng-model="loginModel.recoverEmailID" class="forgot-input form-control inner-addon-err-msg left-addon"
+                        ng-class="{'input-type-err':recover.recoverError}" type="text" id="input-forgot-email" placeholder={{loginTranslation.recoverEmailID}}
+                        min="6" maxlength="40" />
+                    <span ng-show="recover.recoverError" class="glyphicon glyphicon-warning-sign"></span>
+                    <span class="required-error" ng-show="recover.recoverError" ng-bind-html="recover.recoverError"></span>
+                    <div>
+                        <button class="fgPwd-btnCancel" type="button" ng-click="closePWDModal()">{{loginTranslation.cancel}}</button>
+                        <button class="fgPwd-btnSend" type="button" ng-click="forgotPassword(loginModel.recoverEmailID)"><!--{{loginTranslation.sendPassword}}--> {{loginTranslation.sendLink}}</button>
+                    </div>
+                </div>
+            </form>
+            <form class="forgot-form" ng-show="recover.successMsg">
+                <div class="fgPwd-sucess">
+                    <!-- <p>{{loginTranslation.temproraryPassMailMsg}}</p> -->
+                    <p>{{loginTranslation.justEmailledLink}}</p>
+                    <!-- <p>{{loginTranslation.checkMailMsg}}</p> -->
+                    <p>{{loginTranslation.checkAndResetPassword}}</p>
+                </div>
+                <div class="success-content-section">
+                    <button class="fgPwd-btnCancel ok-btn" type="button" ng-click="closePWDModal()">{{loginTranslation.ok}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

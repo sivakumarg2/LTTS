@@ -1,0 +1,20 @@
+<div class="user-list" ng-controller="UserController">
+Agent Details
+<input type="button" value="Add Agent"/>
+<div class="cc-grid-header">
+	<span style="cursor:hand;" ng-click="sortUsers('name')">Agent Name</span>
+	<span>Country</span>
+	<span>EmailID</span>
+	<span style="cursor:hand;" ng-click="sortUsers('location')">Location</span>
+	<span></span>
+</div>
+<div ng-repeat="user in userList | orderBy: sortModel.columnName" class="cc-grid">
+	<span>{{user.name}}</span>
+	<span>{{user.country}}</span>
+	<span>{{user.emailid}}</span>
+	<span>{{user.location}}</span>
+	<span><a ng-click="editUser(user);">Edit</a></span>
+	<span><a ng-click="deleteUser(user);">Delete</a></span>
+</div>
+<div ng-include="'views/partials/agent-configuration.html'"></div>
+</div>

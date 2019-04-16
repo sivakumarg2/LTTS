@@ -1,0 +1,19 @@
+{
+  "title": "Shutdown Reason",
+  "code": "Code",
+  "callDisposition": "Shutdown Reason",
+  "action": "Action",
+  "countryCallDispoModalHeader": "Country Shutdown Reason Settings",
+  "countryCallDispoModalSaveBtn": "Save",
+  "countryCallDispoModalCancelBtn": "Cancel",
+  "countryCallDispoModalCallDispositionLabel": "Shutdown Reason",
+  "countryCallDispoModalTranslationLabel":"Translation",
+  "translatedCallDispoEmpty": "Please enter Shutdown Reason translation",
+  "countryCallDispoSaveStatus": "Country Shutdown Reason settings saved successfully !!",
+  "deletecountryCallDispoSaveStatus": "Country Shutdown Reason settings deleted successfully !!",
+  "showing": "Showing",
+  "of": "of",
+  "pages": "pages",
+  "noRecordFound": "No records found",
+  "noCountryConfigFound": "No country config found"
+}

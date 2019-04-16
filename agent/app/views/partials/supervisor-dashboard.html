@@ -1,0 +1,251 @@
+<div class="dashboard-container" ng-controller="supervisorDashboardController">
+  <h4 class="page-title">{{dashboardLangTranslation.supervisorDashboard}}</h4>
+  <div class="overview-layout">
+    <div class="overview-item verticalLine stats-out-calls">
+      <div class="dashboard-item-data">
+        <h4>{{reports.numOutgoingCalls}}</h4>
+        <label ng-bind="dashboardLangTranslation.outgoingCallsDashItemName"></label>
+      </div>
+      <div class="icon">
+        <img class=" dashboard-item-icon" src="images/dashboard_icons/outgoing_call_icon.png" />
+      </div>
+    </div>
+    <div class="empty-cell"></div>
+    <div class="overview-item verticalLine stats-in-calls">
+      <div class="dashboard-item-data">
+        <h4>{{reports.numberIncomingCalls}}</h4>
+        <label ng-bind="dashboardLangTranslation.incomingCallsDashItemName"></label>
+      </div>
+      <div class="icon">
+        <img class=" dashboard-item-icon" src="images/dashboard_icons/incoming_call_icon.png" />
+      </div>
+    </div>
+    <div class="empty-cell"></div>
+    <div class="overview-item verticalLine stats-long-duration">
+      <div class="dashboard-item-data">
+        <h4>{{reports.longestCallDuration}}</h4>
+        <label>{{dashboardLangTranslation.longestCallDurationDashItemName}}</label>
+      </div>
+      <div class="icon">
+        <img class=" dashboard-item-icon" src="images/dashboard_icons/duration_icon.png" />
+      </div>
+    </div>
+    <div class="empty-cell"></div>
+    <div class="overview-item verticalLine stats-avg-time">
+      <div class="dashboard-item-data">
+        <h4>{{reports.avgTaskAccTime}}</h4>
+        <label ng-bind="dashboardLangTranslation.avgTaskAcceptTimeDashItemName"></label>
+      </div>
+      <div class="icon">
+        <img class=" dashboard-item-icon" src="images/dashboard_icons/task_icon.png" />
+      </div>
+    </div>
+    <div class="empty-cell"></div>
+    <div class="overview-item verticalLine stats-availability">
+      <div class="dashboard-item-data">
+        <h4 class="dashboard-item-data">{{reports.availStats.total}}
+          <span>%</span>
+        </h4>
+        <label ng-bind="dashboardLangTranslation.availableAgentsDashItemName"></label>
+      </div>
+      <div class="graph dashboard-item-icon">
+        <canvas id="doughnut" class=" chart-doughnut" chart-data="reports.availStats.data" chart-labels="reports.availStats.labels"
+          chart-colors="reports.availStats.colors" chart-options="chart_options" />
+      </div>
+    </div>
+  </div>
+  <!-- Agent Details Table Starts -->
+  <div class="sec-header" ng-show="selectedSection == 1">
+    {{dashboardLangTranslation.agentStatus}}
+      <div class="search-top-input-div">
+        <input class="search-input-form-control form-control" ng-model="search.searchText"/>
+        <span class="glyphicon-search-top glyphicon glyphicon-search"></span>
+      </div>
+         
+  </div>
+  <div id="agent-summary-table" ng-show="selectedSection == 1">
+    <div class="summary-container">
+      <!-- <div class="container-div"> -->
+      <div class="table-row table-header">
+        <div class="table-head" ng-click="sortUsers('loggedInStatusId')">
+          <strong ng-bind="dashboardLangTranslation.loggedInOff"></strong>
+        </div>
+        <div class="table-head" ng-click="sortUsers('name')">
+          <strong ng-bind="dashboardLangTranslation.agentName"></strong>
+        </div>
+        <div class="table-head status-cell" ng-click="sortUsers('activityStatusId')">
+          <strong ng-bind="dashboardLangTranslation.status"></strong>
+        </div>
+        <div class="table-head number-word" ng-click="sortUsers('attendedCall')">
+          <strong ng-bind="dashboardLangTranslation.attendedCall"></strong>
+        </div>
+        <div class="table-head number-word" ng-click="sortUsers('missedCall')">
+          <strong ng-bind="dashboardLangTranslation.missedCall"></strong>
+        </div>
+        <div class="table-head number-word" ng-click="sortUsers('outgoingCall')">
+          <strong ng-bind="dashboardLangTranslation.outgoingCall"></strong>
+        </div>
+        <div class="table-head" ng-click="sortUsers('loggedDatetime')">
+          <strong ng-bind="dashboardLangTranslation.statusTimeStamp"></strong>
+        </div>
+      </div>
+      <!-- Call Summary Table Starts -->
+      <div class="elevator-details" ng-init="dash.selected=0;getAvailableDetails()">
+        <div ng-show="(agentDetails | filter:search.searchText).length <= 0" class="collapsable-content no-record-found">{{dashboardLangTranslation.noAgentFound}}</div>
+        <div ng-click="dash.selected=0;showUserActivity(agentDetails)" class="collapsable-content" ng-repeat="agentDetails in filtered = (agentDetails | filter:search.searchText) | orderBy: sortModel.columnName"
+          ng-class="{ 'tw-table':agentDetails.length>10,'ex-table':agentDetails.length <=10} ">
+          <div class="table-row">
+            <div class="table-cell">             
+              <span ng-if="agentDetails.loggedInStatusId == activityStatus[6].id" class="img-custom" id="img{{agentDetails.userId}}">
+                <img src='../images/available-icon.png' /> 
+              </span>
+              <span class="img-custom" ng-if="agentDetails.loggedInStatusId != activityStatus[6].id" id="img{{agentDetails.userId}}">
+                <img src='../images/offline-icon.png' />
+              </span>
+            </div>
+            <div class="table-cell break-word">
+              {{agentDetails.name}}
+            </div>
+            <div class="table-cell status-cell agent-status-identi" id="UserId{{agentDetails.userId}}">
+              {{dashboardLangTranslation["status"+agentDetails.activityStatusId]}}
+            </div>
+            <div class="table-cell number-word" ng-bind="agentDetails.attendedCall"></div>
+            <div class="table-cell number-word" ng-bind="agentDetails.missedCall"></div>
+            <div class="table-cell number-word" ng-bind="agentDetails.outgoingCall"></div>
+            <div class="table-cell" ng-bind="agentDetails.loggedDatetime| localeDateTime"></div>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- Call Summary Table Ends -->
+      <!-- <div ng-show="agentDetails.length > pageSize && selectedSection == 1" class="pull-right pre-nxt-div ">
+        <button type="button" ng-class="{ 'disable-btn':currentPage==0,'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0"
+          ng-click="currentPage=0">
+          <span class="glyphicon glyphicon-backward"></span>
+        </button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage==0, 'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0"
+          ng-click="currentPage=currentPage-1 ">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </button> {{dashboardLangTranslation.showing}} {{currentPage+(filtered.length > 0? 1: 0)}} {{dashboardLangTranslation.of}}
+        {{Math.ceil(filtered.length/10)}} {{dashboardLangTranslation.pages}}
+        <button type="button" ng-class="{ 'disable-btn':currentPage >= Math.ceil(filtered.length/10) - 1,'btn-prnx': currentPage < Math.ceil(filtered.length/10) - 1}"
+          ng-disabled="currentPage >= Math.ceil(filtered.length/10) - 1" ng-disabled="currentPage == Math.ceil(filtered.length/10) - 1"
+          ng-click="currentPage=currentPage+1">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage >= Math.ceil(filtered.length/10) - 1,'btn-prnx': currentPage < Math.ceil(filtered.length/10) - 1 }"
+          ng-disabled="currentPage >= Math.ceil(filtered.length/10) - 1" ng-click="currentPage =  Math.ceil(filtered.length/10)-1">
+          <span class="glyphicon glyphicon-forward"></span>
+        </button>
+      </div> -->
+    </div>
+  </div>
+  <!-- pop up of User Activity History -->
+  <div class="sec-header" ng-show="selectedSection == 2">
+    {{dashboardLangTranslation.activityStatus}}
+  </div>
+  <div id="agent-log-summary-table" ng-show="selectedSection == 2">
+    <div id="user-history" class="call-back">
+      <div id="user-activity-body" ng-class="{'user-activity-body': true}">
+        <div class="name">
+          <span class="header-name">{{dashboardLangTranslation.agentName}}:</span>
+          <span ng-if="agentHistory.loggedInStatusId == activityStatus[6].id" class="img-logged" id="img{{agentHistory.userId}}">
+            <img src='../images/available-icon.png' />
+          </span>
+          <span class="img-logged" ng-if="agentHistory.loggedInStatusId != activityStatus[6].id" id="imga{{agentHistory.userId}}">
+            <img src='../images/offline-icon.png' />
+          </span>
+          <span>{{agentHistory.name}}</span>
+        </div>
+        <div class="tab-container">
+          <span ng-click="dash.selected=0;" ng-class="{'tab': true, 'selected': dash.selected==0, 'not-selected': dash.selected!=0}">{{dashboardLangTranslation.userStatus}}</span>
+          <span ng-click="dash.selected=1;" ng-class="{'tab': true, 'selected': dash.selected==1, 'not-selected': dash.selected!=1}">{{dashboardLangTranslation.callHistory}}</span>
+        </div>
+        <div class="list">
+          <div class="table-row table-header" ng-show="dash.selected==0">
+            <div class="table-head first-col">{{dashboardLangTranslation.activity}}</div>
+            <div class="table-head">{{dashboardLangTranslation.datetime}}</div>
+          </div>
+          <div class="table-row table-header" ng-show="dash.selected==0" ng-repeat="activity in agentHistory.activity | startFrom:currentDetailPage*pageSize | limitTo:pageSize">
+            <div class="table-cell first-col">{{dashboardLangTranslation["status"+activity.activityStatusId]}}</div>
+            <div class="table-cell">{{activity.datetime| localeDateTime}}</div>
+          </div>
+          <div class="missed-calls table-row table-header" ng-show="dash.selected==1">
+            <div class="table-head">{{dashboardLangTranslation.elevatorUnitId}}</div>
+            <div class="table-head">{{dashboardLangTranslation.customernameTBHeader}}</div>
+            <div class="table-head">{{dashboardLangTranslation.contactNumberTBHeader}}</div>
+            <div class="table-head">{{dashboardLangTranslation.recivedDateTBHeaded}}</div>
+            <div class="table-head">{{dashboardLangTranslation.buildingNameTbHeader}}</div>
+            <div class="table-head">{{dashboardLangTranslation.floorDirectionTBHeader}}</div>
+            <div class="table-head">{{dashboardLangTranslation.calldisposition}}</div>
+            <div class="table-head">{{dashboardLangTranslation.notes}}</div>
+          </div>
+          <div ng-click="openViewDetail(call.alarmId)" ng-class="{'missed-calls table-row table-header': true, 'missed-call': call.missedCall == 1}"
+            ng-show="dash.selected==1" ng-repeat="call in agentHistory.calls | startFrom:currentCallPage*pageSize | limitTo:pageSize">
+            <div class="table-cell">{{call.elevatorId}}</div>
+            <div class="table-cell">{{call.customerName}}</div>
+            <div class="table-cell">{{call.contractInformation}}</div>
+            <div class="table-cell">{{call.receivedOn| localeDateTime}}</div>
+            <div class="table-cell">{{call.buildingName}}</div>
+            <div class="table-cell">
+              {{call.floorNumber}}
+              <span>{{call.direction == "0"? "Down": (call.direction == "1"? "Up": "Stopped")}}</span>
+            </div>
+            <div class="table-cell">{{call.callDisposition}}</div>
+            <div class="table-cell">
+              <a tooltip-placement="bottom" uib-tooltip="{{call.notes}}">
+                <img ng-show="call.notes" ng-class="{'ctrl-disable': !call.notes}" src="images/note_icon.png" />
+              </a>
+            </div>
+          </div>
+          <div class="no-rec-div" ng-show="(dash.selected==0 && agentHistory.activity.length <= 0) || (dash.selected==1 && agentHistory.calls.length <= 0)">{{dashboardLangTranslation.noRecordFound}}</div>
+        </div>
+        <div ng-show="agentHistory.activity.length > pageSize && dash.selected==0" class="pull-right pre-nxt-div">
+          <button type="button" ng-class="{ 'disable-btn':currentDetailPage==0,'btn-prnx':currentDetailPage != 0 }" ng-disabled="currentDetailPage==0"
+            ng-click="currentDetailPage=0">
+            <span class="glyphicon glyphicon-backward"></span>
+          </button>
+          <button type="button " ng-class="{ 'disable-btn':currentDetailPage==0, 'btn-prnx':currentDetailPage != 0 }" ng-disabled="currentDetailPage==0"
+            ng-click="currentDetailPage=currentDetailPage-1 ">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </button> {{dashboardLangTranslation.showing}} {{currentDetailPage+(agentHistory.activity.length > 0? 1: 0)}} {{dashboardLangTranslation.of}}
+          {{Math.ceil(agentHistory.activity.length/10)}} {{dashboardLangTranslation.pages}}
+          <button type="button" ng-class="{ 'disable-btn':currentDetailPage >= Math.ceil(agentHistory.activity.length/10) - 1,'btn-prnx': currentDetailPage < Math.ceil(agentHistory.activity.length/10) - 1}"
+            ng-disabled="currentDetailPage >= Math.ceil(agentHistory.activity.length/10) - 1" ng-disabled="currentDetailPage == Math.ceil(agentHistory.activity.length/10) - 1"
+            ng-click="currentDetailPage=currentDetailPage+1">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </button>
+          <button type="button " ng-class="{ 'disable-btn':currentDetailPage >= Math.ceil(agentHistory.activity.length/10) - 1,'btn-prnx': currentDetailPage < Math.ceil(agentHistory.activity.length/10) - 1 }"
+            ng-disabled="currentDetailPage >= Math.ceil(agentHistory.activity.length/10) - 1" ng-click="currentDetailPage =  Math.ceil(agentHistory.activity.length/10)-1">
+            <span class="glyphicon glyphicon-forward"></span>
+          </button>
+        </div>
+        <div ng-show="agentHistory.calls.length > pageSize && dash.selected==1" class="pull-right pre-nxt-div">
+          <button type="button" ng-class="{ 'disable-btn':currentCallPage==0,'btn-prnx':currentCallPage != 0 }" ng-disabled="currentCallPage==0"
+            ng-click="currentCallPage=0">
+            <span class="glyphicon glyphicon-backward"></span>
+          </button>
+          <button type="button " ng-class="{ 'disable-btn':currentCallPage==0, 'btn-prnx':currentCallPage != 0 }" ng-disabled="currentCallPage==0"
+            ng-click="currentCallPage=currentCallPage-1 ">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </button> {{dashboardLangTranslation.showing}} {{currentCallPage+(agentHistory.calls.length > 0? 1: 0)}} {{dashboardLangTranslation.of}}
+          {{Math.ceil(agentHistory.calls.length/10)}} {{dashboardLangTranslation.pages}}
+          <button type="button" ng-class="{ 'disable-btn':currentCallPage >= Math.ceil(agentHistory.calls.length/10) - 1,'btn-prnx': currentCallPage < Math.ceil(agentHistory.calls.length/10) - 1}"
+            ng-disabled="currentCallPage >= Math.ceil(agentHistory.calls.length/10) - 1" ng-disabled="currentCallPage == Math.ceil(agentHistory.calls.length/10) - 1"
+            ng-click="currentCallPage=currentCallPage+1">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </button>
+          <button type="button " ng-class="{ 'disable-btn':currentCallPage >= Math.ceil(agentHistory.calls.length/10) - 1,'btn-prnx': currentCallPage < Math.ceil(agentHistory.calls.length/10) - 1 }"
+            ng-disabled="currentCallPage >= Math.ceil(agentHistory.calls.length/10) - 1" ng-click="currentCallPage =  Math.ceil(agentHistory.calls.length/10)-1">
+            <span class="glyphicon glyphicon-forward"></span>
+          </button>
+        </div>
+        <div class="action-button">
+          <button class="btn-ok" ng-click="selectedSection = 1">{{dashboardLangTranslation.back}}</button>
+        </div>
+      </div>
+    </div>
+    <!-- end -->
+    <!-- Elevator Details Table Ends -->
+
+  </div>

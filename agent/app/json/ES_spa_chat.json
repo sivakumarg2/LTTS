@@ -1,0 +1,23 @@
+{
+  "codeFormLabel": "Prioridad",
+  "chatFormLabel": "Texto de pregunta",
+  "codeTbleHeading": "Prioridad",
+  "chatHeading": "Texto de pregunta",
+  "actionTblHeading": "Acción",
+  "addNewChat": "+ Nuevo texto de pregunta",
+  "saveChatStatus": "Texto de pregunta guardado con éxito",
+  "deleteChatStatus": "Question Text deleted successfully",
+  "chatModalTitle": "Texto de pregunta",
+  "codeFieldEmpty": "Por favor ingrese Prioridad",
+  "chatFieldEmpty": "Por favor ingrese el texto de pregunta",
+  "okbtn": "De acuerdo",
+  "cancelbtn": "Avbryt",
+  "saveBtn": "Lagre",
+  "showing": "Viser",
+  "of": "av",
+  "pages": "sider",
+  "chatCodeDuplicate":"El texto de la pregunta ya existe",
+  "noRecordFound": "No se encontrarón archivos",
+  "isTestCall": "Prueba de llamada",
+  "title":"Textos de preguntas"
+}

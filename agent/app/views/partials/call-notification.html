@@ -1,0 +1,32 @@
+<div id="call-notification" class="my-modal call-notification">
+	<div ng-show="!isTimeout" id="call-notifi-body" ng-class="{'my-modal-content call-notifi-body': true, 'toggle-border': notifiTimeLeft % 2 === 0}">
+		<div class="image-sec"><img src="../images/incoming-call.png" /></div>
+		<div>{{translation.timeLeft}}<br/><strong>{{notifiTimeLeft}}</strong></div>
+		<div>
+			<span>{{translation.incomingCall}}</span>
+			<span><strong>{{call.elevator_id}}</strong></span>
+		</div>
+		<div>{{translation.floorNdirection}}
+			<br/><span> <strong>{{call.floor}} {{call.direction == "0"? "Down": (call.direction == "1"? "Up": "Stopped")}}</strong></span>
+		</div>
+		<div>{{translation.failureReason}}
+			<br/><span><strong>{{call.failure}}</strong></span>
+		</div>
+		<button class="btn btn-answer" id="btnAcceptCall" ng-click="acceptTheCall()">{{translation.answer}}</button>
+	</div>
+	<div ng-show="isTimeout" id="call-notifi-body" ng-class="{'my-modal-content call-notifi-body': true, 'toggle-border': notifiTimeLeft % 2 === 0}">
+		<div class="modal-box-title">
+				<label class="lblHeading">{{translation.missedCall}}</label>
+				<span ng-show="activityUpdated || (notifiTimeLeft <= 0 && agent.selectedStatus == 'Idle')" class="modal-close close" ng-click="closeCallNotifyModal()">&times;</span>
+		</div>
+		<hr>
+		<div>{{translation.missedCallMsg}}{{call.elevator_id}}{{translation.missedCallMsgCont}}</div>
+		<div>
+			<span>{{translation.statusSelection}}</span>
+			<span><select ng-model="agent.selectedStatus" class="sidebar-status" ng-change="changeStatus(agent.selectedStatus, true)">
+					<option ng-show="status.sId!=='' || status.status===agent.selectedStatus" ng-repeat="status in userStatus" value="{{status.status}}">{{statusTranslation[status.text]}}</option>
+					</select></span>
+		</div>
+		<button class="btn btn-answer" ng-click="closeCallNotifyModal()">{{translation.ok}}</button>
+	</div>
+</div>

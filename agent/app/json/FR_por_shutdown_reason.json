@@ -1,0 +1,23 @@
+{
+  "codeFormLabel": "Código",
+  "shutdownReasonFormLabel": "Razão de desligamento",
+  "codeTbleHeading": "Código",
+  "shutdownReasonTblHeading": "Razão de desligamento",
+  "actionTblHeading": "Açao",
+  "addNewShutdownReason": "+ Novo motivo de desligamento",
+  "shutdownReasonSaveStatus": "Razão de desligamento salva com sucesso",
+  "deleteShutdownReasonStatus": "Razão de parada apagada com sucesso",
+  "shutdownReasonModalTitle": "Razão de desligamento",
+  "codeFieldEmpty": "Digite o código de motivo de desligamento",
+  "shutdownReasonFieldEmpty": "Digite o motivo de desligamento",
+  "okbtn": "Está bem",
+  "cancelbtn": "Cancelar",
+  "saveBtn": "Salve",
+  "showing": "Mostrando",
+  "of": "do",
+  "pages": "Páginas",
+  "shutdownReasonCodeDuplicate":"Código de motivo de encerramento já existe",
+  "noRecordFound": "Nenhum registro foi encontrado",
+  "isTestCall": "Chamada de teste",
+  "title":"Razão de desligamento"
+}

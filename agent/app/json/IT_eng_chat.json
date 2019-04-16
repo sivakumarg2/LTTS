@@ -1,0 +1,23 @@
+{
+  "codeFormLabel": "Priority",
+  "chatFormLabel": "Question Text",
+  "codeTbleHeading": "Priority",
+  "chatHeading": "Question Text",
+  "actionTblHeading": "Action",
+  "addNewChat": "+ New Question Text",
+  "saveChatStatus": "Question Text saved successfully",
+  "deleteChatStatus": "Question Text deleted successfully",
+  "chatModalTitle": "Question Text",
+  "codeFieldEmpty": "Please enter Priority",
+  "chatFieldEmpty": "Please enter Question Text",
+  "okbtn": "Ok",
+  "cancelbtn": "Cancel",
+  "saveBtn": "Save",
+  "showing": "Showing",
+  "of": "of",
+  "pages": "pages",
+  "chatCodeDuplicate":"Question Text already exist",
+  "noRecordFound": "No records found",
+  "isTestCall": "Test Call",
+  "title":"Question Texts"
+}

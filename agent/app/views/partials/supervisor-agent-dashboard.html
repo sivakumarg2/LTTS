@@ -1,0 +1,125 @@
+<div class="supervisor-Agent-Dashboard" ng-controller="supervisorDashboardController">
+    <div>
+        <div>Agent Dashboard</div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <div class="col-md-4"> </div>
+                        <div class="col-md-8">
+                            <p>{{incomingCalls}}</p>
+                            <p class="font-nine-size">Outgoing Calls</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-8">
+                            <p>{{outgoingCalls}}</p>
+                            <p class="font-nine-size">Incoming Calls</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <div class="col-md-4"> </div>
+                        <div class="col-md-8">
+                            <p>{{lngCallDuration}}</p>
+                            <p class="font-nine-size">Longest Call Duration</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-8">
+                            <p>{{avgTaskAcceptanceTime}}</p>
+                            <p class="font-nine-size">Average Task Acceptance Time</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <div class="col-md-10">
+                            <div class="available-status">Available Status</div>
+                            <canvas id="doughnut" class="chart chart-doughnut" chart-data="data" chart-labels="labels">
+                            </canvas>
+                        </div>
+                        <div class="col-md-2">
+                            <p>{{availableAgents}}</p>
+                            <div class="font-ten-size">Available Agent</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <div class="row">
+                            <p>Contact Elevator</p>
+                        </div>
+                        <div class="row">
+                            <input type="text" placeholder="Enter Elevator Unit ID" />
+                        </div>
+                        <div class="row">
+                            <button type="button" class="btn btn-primary" class="call-elevat-butn">Call Elevator</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <p>Previous Call Details</p>
+                    </div>
+                    <div class="row">
+                        <input type="text" placeholder="78X125Z12" />
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-primary">Call Elevator</button>
+                    </div>
+                    <div class="row">
+                        <p>Elevator Details</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+             <div class="jumbotron jumbotron-fluid">
+                 <div class="row">
+                     <p class="call-summary">Call Summary</p>
+                     </div>
+                 <div class="row">
+                     <span class="search-elevator-id"><input type="text" id="elevatorID" placeholder="Elevator Unit ID" ng-model="searchKeyword"/></span>
+                     <span><button class="today-butn">Today</button></span>
+                     <span><button class="previous-butn" disabled>Previous</button></span>
+                     </div> 
+            <div class="cc-grid-header">
+                <span ng-click="sortCallSummary('ElevatorUnitID')">Elevator Unit ID</span>
+                <span ng-click="sortCallSummary('Location')">Location</span>
+                <span ng-click="sortCallSummary('ReceivedOn')">Received On</span>
+                <span ng-click="sortCallSummary('ClosedOn')">Closed On</span>
+                <span ng-click="sortCallSummary('Status')">Status</span>
+                <span ng-click="sortCallSummary('Notes')">Notes</span>
+            </div>
+            <div ng-repeat="caller in callSummary| orderBy: sortModel.columnName |filter:searchKeyword" class="cc-grid">
+                <span>{{caller.ElevatorUnitID}}</span><span>{{caller.Location}}</span><span>{{caller.ReceivedOn}}</span><span>{{caller.ClosedOn}}</span><span>{{caller.Status}}</span><span>{{caller.Notes}}</span>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

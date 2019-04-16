@@ -1,0 +1,68 @@
+//// Service Name: userService
+//// Description: This service has methods to handle user management functionalities
+//// Version: 1.0
+/*
+The Source Code and the information it contains is the property of the Otis Elevator Company ("Otis"). The information it contains is highly confidential and is a trade secret of Otis. Access to this work is limited to those selected employees of Otis having a specific need to use it on behalf of Otis. It shall not be used by any other person for any purpose; it may not be reproduced, distributed, or disclosed by or to anyone, including any employee not having a specific need to use it without the express written permission of an officer of Otis. 
+
+Any unauthorized reproduction, disclosure, or distribution of copies by any person of any portion of this work may be a violation of the copyright law of the United States of America and other countries, and could result in the awarding of statutory damages of up to $150,000 dollars (17 USC 504) for infringement, and may result in further civil and criminal penalties.
+
+Unpublished Work - Copyright 2019, Otis Elevator Company
+*/
+(function () {
+	'use strict';
+
+	function ServiceImplementation(userApi) {
+		var GetUser = function (countryId) {
+			return userApi.getUsers.get({ countryId: countryId }).$promise;
+		};
+
+		var AddUser = function (userModel) {
+			var um = angular.copy(userModel);
+			um.languageSkillsId = um.languageSkillsIdTemp;
+			return userApi.addUser.post(um).$promise;
+		};
+
+		var EditUser = function (userModel) {
+			var um = angular.copy(userModel);
+			um.languageSkillsId = um.languageSkillsIdTemp;
+			return userApi.editUser.post(um).$promise;
+		};
+
+		var EditUserPreferences = function (userModel) {
+			return userApi.editUserPreferences.post(userModel).$promise;
+		};
+
+		var UpdateLanguage = function (userModel) {
+			return userApi.updateLanguage.post(userModel).$promise;
+		};
+
+		var DeleteUser = function (user) {
+			return userApi.deleteUser.get(user).$promise;
+		};
+
+		var ChangePasword = function (changePasswrodModel) {
+			return userApi.changePassword.post(changePasswrodModel).$promise;
+		};
+
+		var SaveSettings = function (setting) {
+			return userApi.saveSettings.post(setting).$promise;
+		};		
+
+		var GenRefreshToken = function (userId) {
+			return userApi.genRefreshToken.get({ userId: userId }).$promise;
+		};
+
+		var ValidateUserToken = function () {
+			return userApi.validateUserToken.get().$promise;
+		};
+
+		var GetAllLanguages = function () {
+			return userApi.getAllLanguages.get().$promise;
+		};
+
+		return { getUser: GetUser, addUser: AddUser, editUser: EditUser, editUserPreferences: EditUserPreferences, updateLanguage: UpdateLanguage, deleteUser: DeleteUser, changePassword: ChangePasword, genRefreshToken: GenRefreshToken, validateUserToken: ValidateUserToken, getAllLanguages: GetAllLanguages, saveSettings: SaveSettings };
+	}
+
+	angular.module("CCApp").service("userService", ServiceImplementation);
+	ServiceImplementation.$inject = ['userApi'];
+})();

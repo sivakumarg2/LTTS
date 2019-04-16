@@ -1,0 +1,23 @@
+{
+  "codeFormLabel": "Priorité",
+  "chatFormLabel": "Texte de la question",
+  "codeTbleHeading": "Priorité",
+  "chatHeading": "Texte de la question",
+  "actionTblHeading": "Action",
+  "addNewChat": "+ Nouveau texte de la question",
+  "saveChatStatus": "Texte de la question enregistré avec succès",
+  "deleteChatStatus": "Texte de la question supprimé avec succès",
+  "chatModalTitle": "Texte de la question",
+  "codeFieldEmpty": "Veuillez entrer la priorité",
+  "chatFieldEmpty": "Veuillez entrer le texte de la question",
+  "okbtn": "D'accord",
+  "cancelbtn": "Annuler",
+  "saveBtn": "Sauvegarder",
+  "showing": "Montrer",
+  "of": "de",
+  "pages": "pages",
+  "chatCodeDuplicate":"Le texte de la question existe déjà",
+  "noRecordFound": "Aucun enregistrement trouvé",
+  "isTestCall": "Appel d'essai",
+  "title":"Textes de questions"
+}

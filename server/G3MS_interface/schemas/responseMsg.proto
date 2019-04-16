@@ -1,0 +1,7 @@
+// Copyright 2016 Otis Elevator Co.
+syntax = "proto3";
+package CloudintegratedMessagingService.Proto;
+message GenerateMsg {
+	string message = 1;
+	string statusCode = 2;
+}

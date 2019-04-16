@@ -1,0 +1,246 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Cloud OTISLINE</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="styles/vendor/font-awesome.min.css">
+	<link rel="stylesheet" href="styles/vendor/datepicker.css">
+	<link rel="stylesheet" href="styles/vendor/3.3.7-bootstrap.min.css">
+	<script src="scripts/vendor/3.3.1-jquery.min.js"></script>
+	<script src="scripts/vendor/3.3.7-bootstrap.min.js"></script>
+	
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<!-- build:css(.) styles/vendor.css -->
+	<!-- bower:css -->
+	<link rel="stylesheet" href="bower_components/angularjs-slider/dist/rzslider.css" />
+	<!-- endbower -->
+	<!-- endbuild -->
+	<!-- build:css(.tmp) styles/main.css -->
+	<link rel="stylesheet" href="styles/main.css">
+	<!-- endbuild -->
+	<script type='text/javascript' src='//www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
+
+	<script type="text/javascript" src="scripts/vendor/taskrouter.min.js"></script>
+	<script src="scripts/vendor/jquery-1.12.4.js"></script>
+	<script src="scripts/vendor/jquery-ui.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script> -->
+	<script src="scripts/vendor/moment.min.js"></script>
+	<!-- <script type='text/javascript' src='scripts/vendor/bing.map.js' async defer></script> -->
+	<script src="scripts/vendor/callstats.min.js"></script>
+	<script src="scripts/vendor/callstats-twilio-video.min.js"></script>
+	<script type="text/javascript" src="scripts/vendor/twilio-sync.min.js"></script>
+	
+	<style>
+		html,
+		body {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+
+		.load-overlay {
+			background-color: rgba(255, 255, 255, 0.54);
+			z-index: 10000;
+			bottom: 0;
+			left: 0;
+			position: fixed;
+			right: 0;
+			top: 0;
+			cursor: auto;
+		}
+
+		.preloader-eternalLoading {
+			margin: 0;
+			text-align: center;
+			position: fixed;
+			top: 55%;
+			left: 45%;
+			z-index: 99999;
+			font-weight: bolder;
+		}
+
+		.preloader-background {
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			background-color: red;
+			z-index: 9999;
+		}
+
+		.preloader {
+			margin: 0;
+			width: 100%;
+			text-align: center;
+			position: fixed;
+			top: 48%;
+			left: 0%;
+			z-index: 19999;
+		}
+
+		.preloader>span {
+			width: 80%;
+			display: block;
+			margin-left: 10%;
+			color: #034998;
+			font-size: 15px;
+			padding: 10px 10px 20px;
+		}
+
+		.preloader>div {
+			width: 9px;
+			height: 9px;
+			background-color: #33343c;
+			border-radius: 100%;
+			display: inline-block;
+			-webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+			animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+		}
+
+		.ref-log-wrap .ref-main-cont .ref-main-row .ref-main-column .ref-ins-row label,
+		.ref-log-wrap .ref-main-cont .ref-main-row .ref-main-column .ref-ins-row label span {
+			color: #231F20 !important;
+			margin-bottom: 3px !important;
+		}
+	</style>
+</head>
+
+<body ng-app="CCApp">
+	<!--[if lt IE 7]>
+		  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+		<![endif]-->
+
+	<!-- Add your site or application content here -->
+	<div ng-controller="homeController">
+		<div class="load-overlay" ng-show="loader.showLoader"></div>
+		<div class="preloader" ng-show="loader.showLoader" style="margin: 0;width: 100%;text-align: center;position: fixed;top: 48%;left: 0%;z-index: 19999;">
+			<img src="images/Loading.gif" />
+			<span style="font-size: 18px;visibility:hidden;" id="spanLoader">{{loader.showMessage}}</span>
+		</div>
+		<div ui-view></div>
+	</div>
+	<script type="text/javascript">
+		var appInsights = window.appInsights || function (config) {
+			function s(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, r = document, f = window, e = "script", o = r.createElement(e), i, u; for (o.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", r.getElementsByTagName(e)[0].parentNode.appendChild(o), t.cookie = r.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;) s("track" + i.pop()); return config.disableExceptionTracking || (i = "onerror", s("_" + i), u = f[i], f[i] = function (config, r, f, e, o) { var s = u && u(config, r, f, e, o); return s !== !0 && t["_" + i](config, r, f, e, o), s }), t
+		}({
+			instrumentationKey: "59efb513-ded6-4454-9fef-c9b974a28693"
+		});
+		window.appInsights = appInsights;
+        // appInsights.trackPageView();
+	</script>
+	<!-- build:js(.) scripts/vendor.js -->
+	<!-- bower:js -->
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
+	<script src="bower_components/angular-aria/angular-aria.js"></script>
+	<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+	<script src="bower_components/angular-messages/angular-messages.js"></script>
+	<script src="bower_components/angular-resource/angular-resource.js"></script>
+	<script src="bower_components/angular-route/angular-route.js"></script>
+	<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+	<script src="bower_components/angular-touch/angular-touch.js"></script>
+	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script src="bower_components/angular-mocks/angular-mocks.js"></script>
+	<script src="bower_components/chart.js/dist/Chart.js"></script>
+	<script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
+	<script src="bower_components/angularjs-slider/dist/rzslider.js"></script>
+	<script src="bower_components/js-xlsx/dist/xlsx.core.min.js"></script>
+	<script src="bower_components/file-saver/FileSaver.js"></script>
+	<!-- <script src="bower_components/moment/moment.js"></script>
+	<script src="bower_components/moment-timezone/builds/moment-timezone-with-data-2012-2022.js"></script> -->
+	<script src="bower_components/angular-applicationinsights/dist/angular-applicationinsights.js"></script>
+	<!-- endbower -->
+	<!-- endbuild -->
+
+	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+	<script src="scripts/app.js"></script>
+
+	<!-- Controllers -->
+	<script src='scripts/vendor/datepicker.js'></script>
+	<script src='scripts/vendor/ui.multiselect.js'></script>
+	<script src="scripts/controllers/HomeController.js"></script>
+	<script src="scripts/controllers/LoginController.js"></script>
+	<script src="scripts/controllers/DashboardController.js"></script>
+	<script src="scripts/controllers/ChangePasswordController.js"></script>
+	<script src="scripts/controllers/SupervisorDashboardController.js"></script>
+	<script src="scripts/controllers/SurpervisorReportController.js"></script>
+	<script src="scripts/controllers/ReportController.js"></script>
+	<script src="scripts/controllers/UserController.js"></script>
+	<script src="scripts/controllers/ElevatorController.js"></script>
+	<script src="scripts/controllers/TopbarController.js"></script>
+	<script src="scripts/controllers/CountryController.js"></script>
+	<script src="scripts/controllers/CountryController.js"></script>
+	<script src="scripts/controllers/TroubleshootController.js"></script>
+	<script src="scripts/controllers/AppController.js"></script>
+	<script src="scripts/controllers/callDispstnController.js"></script>
+	<script src="scripts/controllers/countryCallDispositionController.js"></script>
+	<script src="scripts/controllers/ShutdownReasonController.js"></script>
+	<script src="scripts/controllers/CountryShutdownReasonController.js"></script>
+	<script src="scripts/controllers/UserProfileController.js"></script>
+	<script src="scripts/controllers/ChatController.js"></script>
+	<script src="scripts/controllers/CountryChatController.js"></script>
+	<script src="scripts/controllers/WinAppController.js"></script>
+	<script src="scripts/controllers/WinAppVideoController.js"></script>
+	<script src="scripts/controllers/SyncPOCCotroller.js"></script>
+
+	<!-- Services -->
+	<script src="scripts/services/LoginService.js"></script>
+	<script src="scripts/services/CommonService.js"></script>
+	<script src="scripts/services/LanguageService.js"></script>
+	<script src="scripts/services/UserService.js"></script>
+	<script src="scripts/services/LoggingService.js"></script>
+	<script src="scripts/services/CountryService.js"></script>
+	<script src="scripts/services/troubleshootService.js"></script>
+	<script src="scripts/services/G3MSService.js"></script>
+	<script src="scripts/services/CallService.js"></script>
+	<script src="scripts/services/ReportService.js"></script>
+	<script src="scripts/services/ExportService.js"></script>
+	<script src="scripts/services/CallDispositionService.js"></script>
+	<script src="scripts/services/ClickOutsideService.js"></script>
+	<script src="scripts/services/ShutdownReasonService.js"></script>
+	<script src="scripts/services/CountryShutdownService.js"></script>
+	<script src="scripts/services/AzureAppInsightsService.js"></script>
+	<script src="scripts/services/ChatService.js"></script>
+	<script src="scripts/services/CountryChatService.js"></script>
+	<script src="scripts/services/WinAppService.js"></script>
+
+	<!-- RemoteAPI Services -->
+	<script src="scripts/apis/LoginApi.js"></script>
+	<script src="scripts/apis/LanguageApi.js"></script>
+	<script src="scripts/apis/CommonApi.js"></script>
+	<script src="scripts/apis/UserApi.js"></script>
+	<script src="scripts/apis/LogApi.js"></script>
+	<script src="scripts/apis/CountryApi.js"></script>
+	<script src="scripts/apis/troubleApi.js"></script>
+	<script src="scripts/apis/G3MSApi.js"></script>
+	<script src="scripts/apis/CallApi.js"></script>
+	<script src="scripts/apis/ReportApi.js"></script>
+	<script src="scripts/apis/CallDispositionApi.js"></script>
+	<script src="scripts/apis/ShutdownReasonApi.js"></script>
+	<script src="scripts/apis/CountryShutdownReasonApi.js"></script>
+	<script src="scripts/apis/ChatApi.js"></script>
+	<script src="scripts/apis/CountryChatApi.js"></script>
+	<script src="scripts/apis/WinAppApi.js"></script>
+
+	<!--Custom Directives-->
+	<script src="scripts/directives/input-constraint.js"></script>
+	<script src="scripts/directives/clickOutsideDirective.js"></script>
+	<!-- Constants -->
+
+	<!-- Routes -->
+	<script src="scripts/constants.js"></script>
+	<script src="scripts/routes.js"></script>
+
+	<!-- Custom js files -->
+
+	<!-- endbuild -->
+</body>
+
+</html>

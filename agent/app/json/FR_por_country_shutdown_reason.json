@@ -1,0 +1,19 @@
+{
+  "title": "Razão de desligamento",
+  "code": "código",
+  "callDisposition": "Razão de desligamento",
+  "action": "ação",
+  "countryCallDispoModalHeader": "Configurações da razão de desligamento do país",
+  "countryCallDispoModalSaveBtn": "Salvar",
+  "countryCallDispoModalCancelBtn": "Cancelar",
+  "countryCallDispoModalCallDispositionLabel": "Razão de desligamento",
+  "countryCallDispoModalTranslationLabel": "Tradução",
+  "translatedCallDispoEmpty": "Por favor, insira a tradução da razão desligamento",
+  "countryCallDispoSaveStatus": "Parâmetro de país configurações salvas com sucesso!",
+  "deletecountryCallDispoSaveStatus": "Parâmetro de país Configurações de razão excluídas com sucesso!",
+  "showing": "Mostrando",
+  "of": "de",
+  "pages": "páginas",
+  "noRecordFound": "Nenhum registro encontrado",
+  "noCountryConfigFound": "Nenhuma configuração de país encontrada"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Anruf Disposition",
+  "code": "Code",
+  "callDisposition": "Anrufverteilung",
+  "action": "Aktion",
+  "countryCallDispoModalHeader": "Einstellungen für Ländereinstellungen",
+  "countryCallDispoModalSaveBtn": "Speichern",
+  "countryCallDispoModalCancelBtn": "Abbrechen",
+  "countryCallDispoModalCallDispositionLabel": "Anrufverteilung",
+  "countryCallDispoModalTranslationLabel": "traduction",
+  "translatedCallDispoEmpty": "Bitte geben Sie die Anrufverteilung-Übersetzung ein",
+  "countryCallDispoSaveStatus": "Einstellungen für Ländereinstellungen wurden erfolgreich gespeichert !!",
+  "deletecountryCallDispoSaveStatus": "Ländereinstellungen wurden erfolgreich gelöscht !!",
+  "showing": "Zeigen",
+  "of": "von",
+  "Seiten": "Seiten",
+  "noRecordFound": "Keine Datensätze gefunden",
+  "noCountryConfigFound": "Keine Länderkonfiguration gefunden"
+}

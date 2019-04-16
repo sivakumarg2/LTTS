@@ -1,0 +1,145 @@
+<div class="agent-configuration">
+  <div class="agent-lblHeader">{{agentTranslation.mainHeading}}
+    <span class="close" ng-click="closeAgentModal()">&times;</span>
+  </div>
+  <hr>
+  <div class="agent-button row">
+    &nbsp;
+    <span ng-show="errorMessage">{{errorMessage}}</span>
+  </div>
+  <div class="userdetails-content panel-body">
+    <form novalidate>
+      <div class="agent-input row">
+        <div class="agent-lbl-div col-md-4">
+          <label>{{agentTranslation.country}}</label>
+        </div>
+        <div class="col-md-7 form-group">
+          <input type="text" ng-show="currentUser.roleId == 3" class="form-control" ng-model="userDetailModel.selCountry" ng-disabled="currentUser.roleId == 2"
+            autocomplete="off" typeahead-editable="false" uib-typeahead="(country.value) for country in loadCountry($viewValue) | limitTo:9"
+            typeahead-on-select="onSelect($item, $model, $label)" typeahead-template-url="customTemplate.html">
+          <input ng-show="currentUser.roleId != 3" type="text" class="form-control" ng-model="userDetailModel.selCountry" ng-disabled="true"
+            autocomplete="off" typeahead-editable="false" uib-typeahead="(country.value) for country in loadCountry($viewValue) | limitTo:9"
+            typeahead-on-select="onSelect($item, $model, $label)" typeahead-template-url="customTemplate.html">
+          <div class="error-container"></div>
+        </div>
+      </div>
+      <div class="agent-input row">
+        <div class="agent-lbl-div col-md-4">
+          <label>{{agentTranslation.name}}</label>
+        </div>
+        <div class="col-md-7 form-group" ng-class="{'has-error ac-input-feedback': savUserErrorModel.nameError}">
+          <input type="text" class="form-control" ng-maxlength="50" maxlength="50" name="name" ng-model="userDetailModel.name">
+          <span ng-show="savUserErrorModel.nameError" aria-hidden="true" class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+          <div class="error-container">
+            <span ng-show="savUserErrorModel.nameError">{{savUserErrorModel.nameError}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="agent-input row">
+        <div class="agent-lbl-div col-md-4">
+          <label>{{agentTranslation.emailID}}</label>
+        </div>
+        <div class="col-md-7 form-group " ng-class="{'has-error ac-input-feedback': savUserErrorModel.emailIdError}">
+          <input type="text" class="form-control" maxlength="40" name="emailId" ng-model="userDetailModel.emailId" ng-maxlength="40">
+          <span ng-show="savUserErrorModel.emailIdError" aria-hidden="true" class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+          <div class="error-container">
+            <span ng-show="savUserErrorModel.emailIdError">{{savUserErrorModel.emailIdError}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="agent-input row">
+        <div class="agent-lbl-div col-md-4">
+          <label class="agent-lblStatus" for="Status">{{agentTranslation.status}}</label>
+        </div>
+        <div class="col-md-7 form-group" ng-class="{'has-error ac-input-feedback': savUserErrorModel.statusError}">
+          <select class="form-control" ng-disabled="addNew || userDetailModel.userID == currentUser.userID" name="userStatusId" ng-model="userDetailModel.userStatusId"
+            ng-init="userDetailModel.userStatusId= userStatus[0].id">
+            <option ng-repeat="status in userStatus" value="{{status.id}}">{{agentTranslation[status.text]}}</option>
+          </select>
+          <span ng-show="savUserErrorModel.statusError" aria-hidden="true" class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+          <div class="error-container">
+            <span ng-show="savUserErrorModel.statusError">{{savUserErrorModel.statusError}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="agent-input row">
+        <div class="agent-lbl-div col-md-4">
+          <label class="agent-lblRole" for="Roles">{{agentTranslation.roles}}</label>
+        </div>
+        <div class="col-md-7 form-group" ng-class="{'has-error ac-input-feedback': savUserErrorModel.rolesError}">
+          <select class="form-control" name="roleId" ng-model="userDetailModel.roleId" ng-init="userDetailModel.roleId = roles[0].id">
+            <option ng-repeat="role in roles" value="{{role.id}}">{{agentTranslation[role.text]}}</option>
+          </select>
+          <span ng-show="savUserErrorModel.rolesError" aria-hidden="true" class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+          <div class="error-container">
+            <span ng-show="savUserErrorModel.rolesError">{{savUserErrorModel.rolesError}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="agent-input row">
+        <div class="agent-lbl-div col-md-4">
+          <label class="agent-lblRole" for="video">{{agentTranslation.video}}
+            <span tooltip-placement="left" uib-tooltip="{{agentTranslation.videoStreaming}}" class="glyphicon glyphicon-info-sign info-icon"></span>
+          </label>
+        </div>
+        <div class="col-md-7 form-group">
+          <input class="agent-chkbox" id="enable-video" type="checkbox" ng-model="userDetailModel.video" />&nbsp;<label class="overrid-label" for="enable-video">{{agentTranslation.enable}}</label>
+          <div class="error-container"></div>
+        </div>
+      </div>
+      <div class="agent-input row">
+        <div class="agent-lbl-div col-md-4">
+          <label class="agent-lblType" for="Type">{{agentTranslation.shifttype}}</label>
+        </div>
+        <div class="col-md-7 form-group">
+          <span ng-repeat="shiftType in shiftTypes">
+            <input id="{{shiftType.id}}" class="agent-chkbox" type="radio" name="chkshiftType" ng-model="userDetailModel.shiftType" value="{{shiftType.id}}"/>
+            <label for="{{shiftType.id}}"class="overrid-label">{{agentTranslation[shiftType.text]}}</label>
+          </span>
+          <div class="error-container">
+            <span ng-show="savUserErrorModel.employeetypeError">{{savUserErrorModel.employeetypeError}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="agent-input row">
+        <div class="agent-lbl-div col-md-4">
+          <label class="agent-lblCallType" for="calltypes">{{agentTranslation.calltype}}</label>
+        </div>
+        <div class="col-md-7 form-group">
+          <div ng-repeat="callType in callTypes|filter: { isDisplay: 1}" ng-class="{'col-md-6': true, 'pad-left-zero': $index%2 === 0}">
+            <span name="chkcallType" ng-model="userDetailModel.callType">
+              <input id="ct{{callType.id}}" class="agent-chkbox" type="checkbox" name="callType" value="{{callType.type}}" ng-checked="userDetailModel.callType.indexOf(callType.type) > -1"
+                ng-click="toggleSelection(callType.type)" />
+              <label for="ct{{callType.id}}" class="overrid-label">{{agentTranslation[callType.type]}}</label>
+            </span>
+          </div>
+          <div class="error-container">
+            <span ng-show="savUserErrorModel.callTypeError">{{savUserErrorModel.callTypeError}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="agent-input row">
+        <div class="agent-lbl-div col-md-4">
+          <label class="agent-lblLanguage" for="Languages">{{agentTranslation.languages}}</label>
+        </div>
+        
+        <div class="col-md-7 form-group" ng-class="{'has-error ac-input-feedback': savUserErrorModel.languageError}" ng-init="unqLang = getFilteredLanguage()">
+          <multiselect class="input-xlarge" multiple="true" translations="{{agentTranslation}}" ng-model="userDetailModel.languageSkillsId"
+            options="language.id as language.value for language in unqLang" change="selected()">
+          </multiselect>
+          <span ng-show="savUserErrorModel.languageError" aria-hidden="true" class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+          <div class="error-container">
+            <span ng-show="savUserErrorModel.languageError">{{savUserErrorModel.languageError}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="agent-button row">
+        <div class="col-md-4"></div>
+        <div class="col-md-8 pad-left-zero">
+          <button class="col-md-4 btn btn-save" type="submit" ng-click="saveUser(userDetailModel);">{{agentTranslation.save}}</button>
+          <button class="col-md-4 btn btn-cancel" type="text" ng-click="closeAgentModal()">{{agentTranslation.cancel}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

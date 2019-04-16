@@ -1,0 +1,94 @@
+<div class="user-profile-panel panel-default" ng-controller="userProfileController">
+    <div class="user-profile-title">
+        {{translation.title}}
+    </div>
+    <div class="user-profile-body panel-body">
+        <form name="frmchangepwd" class="form-changePwd" novalidate>
+            <div class="user-profile-input row">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-9 label-message status-msg-fade">
+                    <span class="function-success-msg status-msg-fade" ng-show="successMessage" ng-bind-html="successMessage"></span>
+                    <span class="function-msg status-msg-fade" ng-show="exceptionMsg" ng-bind-html="exceptionMsg"></span>
+                </div>
+            </div>
+            <div class="user-profile-input row">
+                <div class="col-md-4 user-profile-label">
+                    {{"Country"}}
+                </div>
+                <div class="col-md-5 form-group">
+                    <input type="text" class="form-control" class="form-control" ng-model="currentUser.countryName" autocomplete="off" readonly
+                        autofocus />
+                </div>
+            </div>
+            <div class="user-profile-input row">
+                <div class="col-md-4 user-profile-label">
+                    {{translation.emailID}}
+                </div>
+                <div class="col-md-5 form-group">
+                    <input type="text" class="form-control" class="form-control" ng-model="currentUser.emailId" autocomplete="off" readonly
+                        autofocus />
+                </div>
+            </div>
+            <div class="user-profile-input row">
+                <div class="col-md-4 user-profile-label">
+                    {{translation.role}}
+                </div>
+                <div class="col-md-5 form-group">
+                    <input type="text" class="form-control" class="form-control" autocomplete="off" readonly autofocus value="{{translation['role'+currentUser.roleId]}}"/>
+                </div>
+            </div>
+            <div class="user-profile-input row">
+                <div class="col-md-4 user-profile-label">
+                    {{translation.video}}
+                    <span tooltip-placement="right" uib-tooltip="{{translation.videoStreaming}}" class="glyphicon glyphicon-info-sign info-icon"></span>
+                </div>
+                <div class="col-md-5 form-group">
+                    <input class="agent-chkbox" type="checkbox" id="enable-video" ng-model="currentUser.video" />&nbsp;<label class="overrid-label" for="enable-video">{{translation.enable}}</label>
+                </div>
+            </div>
+            <div class="user-profile-input row">
+                <div class="col-md-4 user-profile-label">
+                    {{translation.type}}
+                </div>
+                <div class="col-md-5 form-group">
+                    <span ng-repeat="type in userTypes">
+                        <input ng-disabled="true" id="{{type.id}}" class="agent-chkbox" type="radio" name="type" ng-model="currentUser.shiftType" value="{{type.id}}" />
+                        <label for="{{type.id}}"></label>{{translation[type.text]}}
+                    </span>
+                </div>
+            </div>
+            <div class="user-profile-input row">
+                <div class="col-md-4 user-profile-label">
+                    {{translation.calltype}}
+                </div>
+                <div class="col-md-5 form-group">
+                    <div ng-repeat="callType in callTypes|filter: { isDisplay: 1}" ng-class="{'col-md-6': true, 'pad-left-zero': $index%2 === 0}">
+                        <span name="chkcallType" ng-model="currentUser.callType">
+                            <input ng-disabled="true" class="agent-chkbox" type="checkbox" name="callType" value="{{callType.type}}" ng-checked="currentUser.callType.indexOf(callType.type) > -1"
+                                ng-click="toggleSelection(callType.type)" />
+                            <label for="{{callType.id}}"></label>{{translation[callType.type]}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="user-profile-input row">
+                <div class="col-md-4 user-profile-label">
+                    {{translation.languages}}
+                </div>
+                <div class="col-md-5 form-group">
+                    <div ng-repeat="language in languages|filter: { isFirst: 1}" ng-class="{'col-md-6': true, 'pad-left-zero': $index%2 === 0}">
+                        <span name="chkcallType" ng-model="currentUser.language">
+                            <input ng-disabled="true" class="agent-chkbox" type="checkbox" name="language" value="{{language.type}}" ng-checked="currentUser.languageSkillsId.indexOf(language.code) > -1"
+                                ng-click="toggleSelection(language.type)" />
+                            <label for="{{language.id}}"></label>{{translation[language.text]}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="user-profile-footer row">
+                <button class="btn pwd-addbtn" ng-click="saveChanges(currentUser)">{{translation.saveChanges}}</button>
+            </div>
+        </form>
+    </div>
+</div>

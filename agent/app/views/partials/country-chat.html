@@ -1,0 +1,124 @@
+<div class="country-shutdown-reason-container" ng-controller="countryChatController">
+    <div class="save-satus status-msg-fade" ng-show="countryQuestionText.status">
+        <p>{{translation.saveStatus}}</p>
+    </div>
+    <div class="countrySetting-lbltitle">{{translation.title}}
+        <div class="search-top-input-div div-margin-bottom-search">
+            <input class="search-input-form-control form-control" ng-model="search.searchText"/>
+            <span class="glyphicon-search-top glyphicon glyphicon-search"></span>
+          </div>
+    </div>
+    <!-- Country table start -->
+    <div class="countrysetting-table">
+        <div ng-class="{'table': true, 'bottom-margin': (countryQuestionTexts | filter: search.searchText).length <= 0 }">
+            <div class="table-row">
+                <div class="table-head">
+                    <strong>{{translation.priority}}</strong>
+                </div>
+                <div class="table-head">
+                    <strong>{{translation.questionText}}</strong>
+                </div>
+                <div class="table-head">
+                    <strong>{{translation.translation}}</strong>
+                </div>
+                <div class="table-head">
+                    <strong>{{translation.action}}</strong>
+                </div>
+            </div>
+            <div class="table-row" ng-repeat="data in countryQuestionTexts | filter: search.searchText | startFrom:currentPage*pageSize | limitTo:pageSize">
+                <div class="table-cell">{{data.priority}}</div>
+                <div class="table-cell">{{data.questionText}}</div>
+                <div class="table-cell">{{data.translation}}</div>
+                <div class="table-cell">
+                    <span class="glyphicon glyphicon-pencil" ng-click="editCountryQuestionText(data);"></span>
+                    <span class="glyphicon glyphicon-trash" ng-click="data.translation != ''? deleteQuestionText(data.chatMsgId): ''"></span>
+                </div>
+            </div>
+        </div>
+        <div class="table-row-empty-new no-record-found" ng-show="(countryQuestionTexts | filter: search.searchText).length <= 0">{{translation.noCountryConfigFound}}</div>
+    </div>
+    <!-- Country table end -->
+    <!-- Country table pageinitation start -->
+    <div ng-show="(countryQuestionTexts | filter: search.searchText).length > pageSize " class="pre-nxt-div ">
+        <button type="button" ng-class="{ 'disable-btn':currentPage==0,'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0"
+            ng-click="currentPage=0">
+            <span class="glyphicon glyphicon-backward"></span>
+        </button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage==0, 'btn-prnx':currentPage != 0 }" ng-disabled="currentPage==0"
+            ng-click="currentPage=currentPage-1 ">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </button> {{translation.showing}} {{currentPage+1}} {{translation.of}} {{Math.ceil((countryQuestionTexts | filter: search.searchText).length / pageSize)}} {{translation.pages}}
+        <button type="button" ng-class="{ 'disable-btn':currentPage >= (countryQuestionTexts | filter: search.searchText).length/pageSize - 1,'btn-prnx': currentPage < (countryQuestionTexts | filter: search.searchText).length/pageSize - 1}"
+            ng-disabled="currentPage >= (countryQuestionTexts | filter: search.searchText).length/pageSize - 1" ng-disabled="currentPage == (countryQuestionTexts | filter: search.searchText).length/pageSize - 1"
+            ng-click="currentPage=currentPage+1">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+        <button type="button " ng-class="{ 'disable-btn':currentPage >= (countryQuestionTexts | filter: search.searchText).length/pageSize - 1,'btn-prnx': currentPage < (countryQuestionTexts | filter: search.searchText).length/pageSize - 1 }"
+            ng-disabled="currentPage >= (countryQuestionTexts | filter: search.searchText).length/pageSize - 1" ng-click="currentPage =  Math.ceil((countryQuestionTexts | filter: search.searchText).length / pageSize) -1">
+            <span class="glyphicon glyphicon-forward"></span>
+        </button>
+    </div>
+    <!-- Country table pageinitation end -->
+    <!-- Question Text modal start -->
+    <div id="countryQuestionTextModal" class="cca-modal">
+        <div class="cca-modal-dialog">
+            <div class="cca-modal-content">
+                <div class="cca-modal-header">
+                    {{translation.questionText}}
+                    <span class="close" ng-click="hideCountryQuestionTextModal()">&times;</span>
+                </div>
+                <div class="cca-modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 center">
+                            <form class="form-horizontal" novalidate>
+                                <!--Priority input start, but disabled -->
+                                <div class="form-group">
+                                    <label for="priority" class="col-sm-4">{{translation.priority}}</label>
+                                    <div class="col-sm-7">
+                                        <input ng-disabled="disabled" type="text" class="form-control" id="priority" ng-value="countryQuestionTextModal.priority"
+                                        />
+                                    </div>
+                                </div>
+                                <!--Priority input end-->
+                                <!--  Question Text input start-->
+                                <div class="form-group">
+                                    <label for="questionText" class="col-sm-4">{{translation.questionText}}</label>
+                                    <div class="col-sm-7">
+                                        <textarea rows="3" ng-disabled="disabled" type="text" class="form-control" id="questionText" ng-value="countryQuestionTextModal.questionText"
+                                        />
+                                    </div>
+                                </div>
+                                <!-- Question Text input end -->
+                                <!--  Question Text translation input start-->
+                                <div class="form-group" ng-class="{'has-error ac-input-feedback': formfieldError.hasError}">
+                                    <label for="questionTextTranslation" class="col-sm-4">{{translation.translation}}</label>
+                                    <div class="col-sm-7">
+                                        <textarea rows="3" ng-model="countryQuestionTextModal.translation" type="text" class="form-control" id="questionTextTranslation"
+                                        />
+                                        <span ng-show="formfieldError.hasError" aria-hidden="true" class="glyphicon glyphicon-warning-sign ac-form-control-feedback"></span>
+                                        <div class="error-container">
+                                            <span ng-show="formfieldError.hasError">{{formfieldError.message}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question Text translation input end -->
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 col-sm-5 redirectionItems">
+                                        <button type="button" class="btn btn-grey btn-cancel pull-right" ng-click="hideCountryQuestionTextModal();">{{translation.cancelBtn}}</button>
+                                        <button type="submit" class="btn btn-blue btn-save pull-right" ng-click="saveOrUpdateCountryQuestionText(countryQuestionTextModal)">{{translation.saveBtn}}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Question Text modal end -->
+    <div id="delete-confirmation" class="my-modal">
+        <div class="my-modal-content modal-content-minwidth">
+            <div ng-include="'views/partials/delete-confirmation.html'"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package google.protobuf;
+
+enum InputType{
+UNKNOWN= 0;
+BUILDING = 1;
+GROUP = 2;
+UNIT = 3;
+}
+
+message DeviceInput
+{
+InputType input_type= 1;
+string elevator_number = 2;
+}
